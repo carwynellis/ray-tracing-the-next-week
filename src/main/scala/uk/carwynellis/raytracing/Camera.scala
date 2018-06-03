@@ -10,6 +10,8 @@ import scala.annotation.tailrec
   * @param upVector the vertical up vector for the camera
   * @param verticalFieldOfView the vertical field of view expressed in degrees
   * @param aspectRatio the aspect ratio of the image
+  * @param time0 start time for motion blur handling, analagous to shutter open time
+  * @param time1 end time for motion blur handling, analagous to shutter close time
   */
 class Camera(origin: Vec3,
              target: Vec3,
@@ -17,8 +19,9 @@ class Camera(origin: Vec3,
              verticalFieldOfView: Double,
              aspectRatio: Double,
              aperture: Double,
-             focusDistance: Double
-            ) {
+             focusDistance: Double,
+             time0: Double,
+             time1: Double) {
 
   private val lensRadius = aperture / 2
 
@@ -36,9 +39,8 @@ class Camera(origin: Vec3,
   private val horizontal = 2 * halfWidth * focusDistance * u
   private val vertical = 2 * halfHeight * focusDistance * v
 
-  def getRay(s: Double, t: Double) = {
+  def getRay(s: Double, t: Double): Ray = {
 
-    // TODO - find a better place to define this, disk object perhaps?
     @tailrec
     def randomPointInUnitDisk(): Vec3 = {
 
@@ -55,9 +57,13 @@ class Camera(origin: Vec3,
     val rd = lensRadius * randomPointInUnitDisk()
     val offset = u * rd.x * rd.y
 
+    // Compute a random time between time0 and time1 for motion blur handling.
+    val rayTime = time0 + (math.random() * (time1 - time0))
+
     Ray(
       origin = origin + offset,
-      direction = lowerLeftCorner + (s * horizontal) + (t * vertical) - origin - offset
+      direction = lowerLeftCorner + (s * horizontal) + (t * vertical) - origin - offset,
+      time = rayTime
     )
   }
 
@@ -70,6 +76,8 @@ object Camera {
             verticalFieldOfView: Double,
             aspectRatio: Double,
             aperture: Double,
-            focusDistance: Double) =
-    new Camera(origin, target, upVector, verticalFieldOfView, aspectRatio, aperture, focusDistance)
+            focusDistance: Double,
+            time0: Double,
+            time1: Double) =
+    new Camera(origin, target, upVector, verticalFieldOfView, aspectRatio, aperture, focusDistance, time0, time1)
 }

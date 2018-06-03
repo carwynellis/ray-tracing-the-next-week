@@ -4,7 +4,7 @@ object Render extends App {
 
   val width = 1200
   val height = 800
-  val samples = 100
+  val samples = 1
 
   val origin = Vec3(13, 2, 3)
   val target = Vec3(0, 0, 0)
@@ -15,8 +15,10 @@ object Render extends App {
     upVector = Vec3(0, 1, 0),
     verticalFieldOfView = 20,
     aspectRatio =  width.toDouble / height.toDouble,
-    aperture = 0.1,
-    focusDistance = 1
+    aperture = 0.0,
+    focusDistance = 10,
+    time0 = 0.0,
+    time1 = 1.0
   )
 
   val filename = "image.ppm"

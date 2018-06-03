@@ -1,15 +1,8 @@
-package uk.carwynellis.raytracing
+package uk.carwynellis.raytracing.hitable
+
+import uk.carwynellis.raytracing.{HitRecord, Material, Ray, Vec3}
 
 import scala.annotation.tailrec
-
-case class HitRecord(t: Double, p: Vec3, normal: Vec3, material: Material)
-
-// TODO - better name for this trait?
-trait Hitable {
-
-  def hit(r: Ray, tMin: Double, tMax: Double): Option[HitRecord]
-
-}
 
 class Sphere(val centre: Vec3, val radius: Double, val material: Material) extends Hitable {
 
@@ -68,28 +61,3 @@ object Sphere {
   }
 }
 
-class HitableList(val hitables: List[Hitable]) extends Hitable {
-
-  override def hit(r: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
-
-    @tailrec
-    def loop(hs: List[Hitable], closest: Double, hitAnything: Boolean, record: Option[HitRecord]): Option[HitRecord] = {
-      hs match {
-        case x :: xs =>
-          val hitResult = x.hit(r, tMin, closest)
-          hitResult match {
-            case Some(updatedRecord) => loop(xs, updatedRecord.t, hitAnything = true, Some(updatedRecord))
-            case None => loop(xs, closest, hitAnything = hitAnything, record)
-          }
-        case Nil => record
-      }
-    }
-
-    loop(hitables, closest = tMax, hitAnything = false, None)
-  }
-
-}
-
-object HitableList {
-  def apply(hitables: List[Hitable]) = new HitableList(hitables)
-}

@@ -1,5 +1,9 @@
 package uk.carwynellis.raytracing
 
+import uk.carwynellis.raytracing.hitable.{Hitable, HitableList, MovingSphere, Sphere}
+
+// TODO - replace List with Seq
+
 object Scene {
 
   val staticScene = HitableList(List(
@@ -17,7 +21,7 @@ object Scene {
     val range = lowerBound until upperBound
 
     // TODO - refactor - this is a rough port of the C++ code
-    def generateSpheres: List[Sphere] = range.flatMap { a =>
+    def generateSpheres: List[Hitable] = range.flatMap { a =>
       range.flatMap { b =>
         val materialSelector = math.random()
 
@@ -31,9 +35,16 @@ object Scene {
     }.toList
 
     // TODO - refactor as above
-    def generateSphere(c: Vec3, m: Double): Option[Sphere] = if ((c - Vec3(4, 0.2, 0)).length > 0.9) {
+    def generateSphere(c: Vec3, m: Double): Option[Hitable] = if ((c - Vec3(4, 0.2, 0)).length > 0.9) {
       if (m < 0.8)
-        Some(Sphere(c, 0.2, Lambertian(Vec3(math.random(), math.random(), math.random()))))
+        Some(MovingSphere(
+          centre0 = c,
+          centre1 = c + Vec3(0, math.random() * 0.5, 0),
+          radius = 0.2,
+          time0 = 0.0,
+          time1 = 1.0,
+          material = Lambertian(Vec3(math.random(), math.random(), math.random()))
+        ))
       else if (m < 0.95) {
         def randomColor = 0.5 * (1 + math.random())
         Some(Sphere(c, 0.2,

@@ -1,5 +1,7 @@
 package uk.carwynellis.raytracing
 
+import uk.carwynellis.raytracing.hitable.Hitable
+
 class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples: Int) {
 
   // When rendering some rays may may include a floating point error preventing them from being treated as 0.
