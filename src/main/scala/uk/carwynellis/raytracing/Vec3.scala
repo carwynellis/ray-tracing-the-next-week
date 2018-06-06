@@ -11,6 +11,11 @@ package uk.carwynellis.raytracing
   */
 case class Vec3(x: Double, y: Double, z: Double) {
 
+  // For now allow emulation of the array index style.
+  private def components = Seq(x, y, z)
+
+  def get(i: Int) = components(i)
+
   // Alias the x, y, z values.
   val r: Double = x
   val g: Double = y

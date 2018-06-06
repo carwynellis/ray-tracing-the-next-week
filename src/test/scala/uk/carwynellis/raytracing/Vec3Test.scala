@@ -60,4 +60,9 @@ class Vec3Test extends FunSuite with Matchers {
     Vec3(1, 2, 3).cross(Vec3(4, 5, 6)) should be(Vec3(-3, 6, -3))
   }
 
+  test("get should return expected values") {
+    val underTest = Vec3(1, 2, 3)
+    (0 until 3) foreach { i => underTest.get(i) shouldBe i + 1 }
+  }
+
 }
