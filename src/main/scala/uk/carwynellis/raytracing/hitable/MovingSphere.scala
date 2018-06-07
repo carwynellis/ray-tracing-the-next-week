@@ -1,6 +1,6 @@
 package uk.carwynellis.raytracing.hitable
 
-import uk.carwynellis.raytracing.{HitRecord, Material, Ray, Vec3}
+import uk.carwynellis.raytracing._
 
 /**
   * Class representing a sphere in motion.
@@ -63,6 +63,20 @@ class MovingSphere(val centre0: Vec3,
     }
 
     None
+  }
+
+  override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = {
+    val radiusVector = Vec3(radius, radius, radius)
+
+    def boundingBoxAtTime(t: Double) = AxisAlignedBoundingBox(
+      min = centreAtTime(t) - radiusVector,
+      max = centreAtTime(t) + radiusVector
+    )
+
+    Some(AxisAlignedBoundingBox.surroundingBox(
+      box0 = boundingBoxAtTime(t0),
+      box1 = boundingBoxAtTime(t1)
+    ))
   }
 
 }

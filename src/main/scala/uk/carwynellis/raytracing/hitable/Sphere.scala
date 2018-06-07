@@ -1,6 +1,6 @@
 package uk.carwynellis.raytracing.hitable
 
-import uk.carwynellis.raytracing.{HitRecord, Material, Ray, Vec3}
+import uk.carwynellis.raytracing._
 
 import scala.annotation.tailrec
 
@@ -44,6 +44,15 @@ class Sphere(val centre: Vec3, val radius: Double, val material: Material) exten
 
     None
   }
+
+  override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = {
+    val radiusVector = Vec3(radius, radius, radius)
+    Some(AxisAlignedBoundingBox(
+      min = centre - radiusVector,
+      max = centre + radiusVector
+    ))
+  }
+
 }
 
 object Sphere {

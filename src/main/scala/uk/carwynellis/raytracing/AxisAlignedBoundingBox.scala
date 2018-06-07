@@ -1,6 +1,8 @@
 package uk.carwynellis.raytracing
 
 import scala.annotation.tailrec
+import uk.carwynellis.raytracing.AxisAlignedBoundingBox.minD
+import uk.carwynellis.raytracing.AxisAlignedBoundingBox.maxD
 
 /**
   * Defines an axis aligned bounding box (AABB) around a set of objects.
@@ -10,7 +12,7 @@ import scala.annotation.tailrec
   * @param min
   * @param max
   */
-class AxisAlignedBoundingBox(min: Vec3, max: Vec3) {
+class AxisAlignedBoundingBox(val min: Vec3, val max: Vec3) {
 
   /**
     * Determine whether a given ray has hit the bounding box or not.
@@ -40,12 +42,28 @@ class AxisAlignedBoundingBox(min: Vec3, max: Vec3) {
     loop(0, 0, 0)
   }
 
-  // TODO - are these any faster than math.min / math.max?
-  private def minD(a: Double, b: Double) = if (a < b) a else b
-  private def maxD(a: Double, b: Double) = if (a > b) a else b
 
 }
 
 object AxisAlignedBoundingBox {
   def apply(min: Vec3, max: Vec3) = new AxisAlignedBoundingBox(min, max)
+
+  def surroundingBox(box0: AxisAlignedBoundingBox, box1: AxisAlignedBoundingBox): AxisAlignedBoundingBox = {
+    val min = Vec3(
+      x = minD(box0.min.x, box1.min.x),
+      y = minD(box0.min.y, box1.min.y),
+      z = minD(box0.min.z, box1.min.z)
+    )
+
+    val max = Vec3(
+      x = maxD(box0.max.x, box1.max.x),
+      y = maxD(box0.max.y, box1.max.y),
+      z = maxD(box0.max.z, box1.max.z)
+    )
+
+    AxisAlignedBoundingBox(min, max)
+  }
+
+  def minD(a: Double, b: Double): Double = if (a < b) a else b
+  def maxD(a: Double, b: Double): Double = if (a > b) a else b
 }
