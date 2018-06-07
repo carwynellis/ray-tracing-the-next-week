@@ -1,5 +1,7 @@
 package uk.carwynellis.raytracing
 
+import scala.annotation.tailrec
+
 /**
   * Defines an axis aligned bounding box (AABB) around a set of objects.
   *
@@ -10,27 +12,32 @@ package uk.carwynellis.raytracing
   */
 class AxisAlignedBoundingBox(min: Vec3, max: Vec3) {
 
-  // TODO - can this index based algorithm be expressed differently?
+  /**
+    * Determine whether a given ray has hit the bounding box or not.
+    *
+    * @param ray
+    * @return
+    */
   def hit(ray: Ray): Boolean = {
-    // TODO - this is a straight port of the existing method that uses mutable state.
-    //      - consider a refactor once tests are in place
-    var tMin = 0.0
-    var tMax = 0.0
+    @tailrec
+    def loop(i: Int, tMin: Double, tMax: Double): Boolean = {
+      if (i >= 3) true
+      else {
+        val iMin = (min.get(i) - ray.origin.get(i)) / ray.direction.get(i)
+        val iMax = (max.get(i) - ray.origin.get(i)) / ray.direction.get(i)
 
-    (0 until 3) foreach { i =>
-      val iMin = (min.get(i) - ray.origin.get(i)) / ray.direction.get(i)
-      val iMax = (max.get(i) - ray.origin.get(i)) / ray.direction.get(i)
+        val t0 = minD(iMin, iMax)
+        val t1 = maxD(iMin, iMax)
 
-      val t0 = minD(iMin, iMax)
-      val t1 = maxD(iMin, iMax)
+        val sMin = minD(t0, t1)
+        val sMax = maxD(t0, t1)
 
-      tMin = minD(t0, t1)
-      tMax = maxD(t0, t1)
-
-      if (tMax <= tMin) return false
+        if (sMax <= sMin) false
+        else loop(i + 1, sMin, sMax)
+      }
     }
 
-    true
+    loop(0, 0, 0)
   }
 
   // TODO - are these any faster than math.min / math.max?
