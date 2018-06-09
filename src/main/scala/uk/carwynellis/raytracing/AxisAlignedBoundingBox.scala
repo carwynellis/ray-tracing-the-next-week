@@ -42,7 +42,6 @@ class AxisAlignedBoundingBox(val min: Vec3, val max: Vec3) {
     loop(0, 0, 0)
   }
 
-
 }
 
 object AxisAlignedBoundingBox {
