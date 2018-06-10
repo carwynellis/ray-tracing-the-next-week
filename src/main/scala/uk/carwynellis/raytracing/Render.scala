@@ -27,7 +27,8 @@ object Render extends App {
 
   println(s"Rendering scene to $filename")
 
-  val bvh = BoundingVolumeHierarchy.ofHitables(Scene.staticScene.hitables, 0.0, 0.2)
+//  val bvh = BoundingVolumeHierarchy.ofHitables(Scene.staticScene.hitables, 0.0, 0.2)
+  val bvh = BoundingVolumeHierarchy.ofHitables(Scene.randomScene().hitables, 0.0, 0.2)
 
   val renderer = Renderer(camera, bvh, width, height, samples)
   val imageWriter = ImageWriter(width, height, "image.ppm")

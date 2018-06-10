@@ -18,7 +18,9 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
     */
   def color(r: Ray, world: Hitable, depth: Int): Vec3 = {
 
+//    println("Computing Hit")
     val hitResult = world.hit(r, ImageSmoothingLimit, Double.MaxValue)
+//    println("Finished computing hit")
 
     hitResult match {
       case Some(hit) =>

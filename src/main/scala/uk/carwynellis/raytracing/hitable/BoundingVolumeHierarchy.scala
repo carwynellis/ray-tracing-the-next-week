@@ -10,8 +10,10 @@ class BoundingVolumeHierarchy(val node: List[Hitable],
                               val time0: Double,
                               val time1: Double) extends Hitable {
 
+  // TODO - this is very slow - why?
   override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
-    if (box.hit(ray)) {
+//    println("bvh.hit()")
+    if (box.hit(ray, tMin, tMax)) {
       val hitLeft = left.flatMap(_.hit(ray, tMin, tMax))
       val hitRight = right.flatMap(_.hit(ray, tMin, tMax))
       (hitLeft, hitRight) match {
@@ -42,11 +44,11 @@ object BoundingVolumeHierarchy {
       else if (axis == 1) hitables.sortWith(compareYAxis)
       else hitables.sortWith(compareZAxis)
 
-    val (left: Option[Hitable], right: Option[Hitable]) = hitables.size match {
-      case 1 => (hitables.headOption, hitables.headOption)
-      case 2 => (hitables.headOption, hitables.lastOption)
+    val (left: Option[Hitable], right: Option[Hitable]) = sortedHitables.size match {
+      case 1 => (sortedHitables.headOption, sortedHitables.headOption)
+      case 2 => (sortedHitables.headOption, sortedHitables.lastOption)
       case n =>
-        val (hitablesLeft, hitablesRight) = hitables.splitAt(n / 2)
+        val (hitablesLeft, hitablesRight) = sortedHitables.splitAt(n / 2)
         (
           Some(ofHitables(hitablesLeft, time0, time1)),
           Some(ofHitables(hitablesRight, time0, time1))
@@ -66,7 +68,7 @@ object BoundingVolumeHierarchy {
       case Some(b) => b
     }
 
-    new BoundingVolumeHierarchy(hitables, left, right, boundingBox, time0, time1)
+    new BoundingVolumeHierarchy(sortedHitables, left, right, boundingBox, time0, time1)
   }
 
   // TODO - refactor the following to apply some DRY

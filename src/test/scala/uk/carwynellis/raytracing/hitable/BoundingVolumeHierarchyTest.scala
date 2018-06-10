@@ -13,8 +13,8 @@ class BoundingVolumeHierarchyTest extends FunSuite with Matchers {
 
     val result = BoundingVolumeHierarchy.ofHitables(hitables, 0, 0)
 
-    result.left shouldBe Some(sphere)
-    result.right shouldBe Some(sphere)
+    result.left shouldBe None
+    result.right shouldBe None
   }
 
   test("should build a single node with left node set to first element and right node set to second for list of two hitables") {

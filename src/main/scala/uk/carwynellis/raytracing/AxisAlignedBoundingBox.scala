@@ -20,26 +20,33 @@ class AxisAlignedBoundingBox(val min: Vec3, val max: Vec3) {
     * @param ray
     * @return
     */
-  def hit(ray: Ray): Boolean = {
+  def hit(ray: Ray, tMin: Double, tMax: Double): Boolean = {
     @tailrec
-    def loop(i: Int, tMin: Double, tMax: Double): Boolean = {
-      if (i >= 3) true
+    def loop(i: Int, lMin: Double, lMax: Double): Boolean = {
+      if (i >= 3) {
+//        println(s"AABB.hit() returning true")
+        true
+      }
       else {
+//        println(s"AABB.hit() index $i")
         val iMin = (min.get(i) - ray.origin.get(i)) / ray.direction.get(i)
         val iMax = (max.get(i) - ray.origin.get(i)) / ray.direction.get(i)
 
         val t0 = minD(iMin, iMax)
         val t1 = maxD(iMin, iMax)
 
-        val sMin = minD(t0, t1)
-        val sMax = maxD(t0, t1)
+        val sMin = maxD(t0, lMin)
+        val sMax = minD(t1, lMax)
 
-        if (sMax <= sMin) false
+        if (sMax <= sMin) {
+//          println(s"AABB.hit() index $i - returning false")
+          false
+        }
         else loop(i + 1, sMin, sMax)
       }
     }
 
-    loop(0, 0, 0)
+    loop(0, tMin, tMax)
   }
 
 }
