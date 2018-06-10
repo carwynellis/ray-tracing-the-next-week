@@ -1,7 +1,9 @@
 package uk.carwynellis.raytracing.hitable
 import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Ray}
 
-class BoundingVolumeHierarchy(val node: Hitable,
+// TODO - review the node definition here
+//      - do we need node as the whole list or can we select the centre of the list as the node?
+class BoundingVolumeHierarchy(val node: List[Hitable],
                               val left: Option[Hitable],
                               val right: Option[Hitable],
                               val box: AxisAlignedBoundingBox,
@@ -9,35 +11,30 @@ class BoundingVolumeHierarchy(val node: Hitable,
                               val time1: Double) extends Hitable {
 
   override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
-    // TODO - which time values do we use here??
-    val box = boundingBox(time0, time1)
-
-    box.flatMap { b =>
-      if (b.hit(ray)) {
-        val hitLeft = left.flatMap(_.hit(ray, tMin, tMax))
-        val hitRight = right.flatMap(_.hit(ray, tMin, tMax))
-        (hitLeft, hitRight) match {
-          case (Some(l), Some(r)) => if (l.t < r.t) Some(l) else Some(r)
-          case (Some(l), None) => Some(l)
-          case (None, Some(r)) => Some(r)
-          case _ => None
-        }
+    if (box.hit(ray)) {
+      val hitLeft = left.flatMap(_.hit(ray, tMin, tMax))
+      val hitRight = right.flatMap(_.hit(ray, tMin, tMax))
+      (hitLeft, hitRight) match {
+        case (Some(l), Some(r)) => if (l.t < r.t) Some(l) else Some(r)
+        case (Some(l), None) => Some(l)
+        case (None, Some(r)) => Some(r)
+        case _ => None
       }
-      else None
     }
+    else None
   }
 
-  // TODO - we just delegate to the bounding box method on the current hitable. Is this correct? The sample code is
-  //        somewhat opaque on this.
-  override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = node.boundingBox(t0, t1)
-
+  override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = Some(box)
 }
 
 object BoundingVolumeHierarchy {
 
-  def ofHitables(hitables: List[Hitable], time0: Double, time1: Double): Unit = {
+  def apply(hitables: List[Hitable], left: Option[Hitable], right: Option[Hitable], boundingBox: AxisAlignedBoundingBox, time0: Double, time1: Double) =
+    new BoundingVolumeHierarchy(hitables, left, right, boundingBox, time0, time1)
 
-    // TODO - why do we select a random axis?
+  // TODO - review this and see if it can be simplified
+  def ofHitables(hitables: List[Hitable], time0: Double, time1: Double): BoundingVolumeHierarchy = {
+
     val axis = (3 * math.random()).toInt
 
     val sortedHitables =
@@ -45,22 +42,22 @@ object BoundingVolumeHierarchy {
       else if (axis == 1) hitables.sortWith(compareYAxis)
       else hitables.sortWith(compareZAxis)
 
-    val (left: Hitable, right: Hitable) = hitables.size match {
-      case 1 => (hitables.head, hitables.head)
-      case 2 => (hitables.head, hitables.tail)
+    val (left: Option[Hitable], right: Option[Hitable]) = hitables.size match {
+      case 1 => (hitables.headOption, hitables.headOption)
+      case 2 => (hitables.headOption, hitables.lastOption)
       case n =>
         val (hitablesLeft, hitablesRight) = hitables.splitAt(n / 2)
         (
-          ofHitables(hitablesLeft, time0, time1),
-          ofHitables(hitablesRight, time0, time1)
+          Some(ofHitables(hitablesLeft, time0, time1)),
+          Some(ofHitables(hitablesRight, time0, time1))
         )
     }
 
-    val boxRight = right.boundingBox(time0, time1)
-
     val result = for {
-      bl <- left.boundingBox(time0, time1)
-      br <- right.boundingBox(time0, time1)
+      l <- left
+      r <- right
+      bl <- l.boundingBox(time0, time1)
+      br <- r.boundingBox(time0, time1)
       box = AxisAlignedBoundingBox.surroundingBox(bl, br)
     } yield box
 
@@ -69,11 +66,7 @@ object BoundingVolumeHierarchy {
       case Some(b) => b
     }
 
-    hitables.size match {
-      case 1 => new BoundingVolumeHierarchy(hitables.head, None, None, boundingBox, time0, time1)
-      case 2 => ???
-      case n => ???
-    }
+    new BoundingVolumeHierarchy(hitables, left, right, boundingBox, time0, time1)
   }
 
   // TODO - refactor the following to apply some DRY

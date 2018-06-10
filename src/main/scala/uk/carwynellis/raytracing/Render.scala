@@ -1,10 +1,12 @@
 package uk.carwynellis.raytracing
 
+import uk.carwynellis.raytracing.hitable.BoundingVolumeHierarchy
+
 object Render extends App {
 
   val width = 1200
   val height = 800
-  val samples = 100
+  val samples = 1
 
   val origin = Vec3(13, 2, 3)
   val target = Vec3(0, 0, 0)
@@ -25,7 +27,9 @@ object Render extends App {
 
   println(s"Rendering scene to $filename")
 
-  val renderer = Renderer(camera, Scene.randomScene(), width, height, samples)
+  val bvh = BoundingVolumeHierarchy.ofHitables(Scene.staticScene.hitables, 0.0, 0.2)
+
+  val renderer = Renderer(camera, Scene.staticScene, width, height, samples)
   val imageWriter = ImageWriter(width, height, "image.ppm")
 
   renderer.renderScene().foreach(imageWriter.writePixel)
