@@ -29,7 +29,7 @@ object Render extends App {
 
   val bvh = BoundingVolumeHierarchy.ofHitables(Scene.staticScene.hitables, 0.0, 0.2)
 
-  val renderer = Renderer(camera, Scene.staticScene, width, height, samples)
+  val renderer = Renderer(camera, bvh, width, height, samples)
   val imageWriter = ImageWriter(width, height, "image.ppm")
 
   renderer.renderScene().foreach(imageWriter.writePixel)
