@@ -12,18 +12,22 @@ package uk.carwynellis.raytracing
 case class Vec3(x: Double, y: Double, z: Double) {
 
   /**
-    * Return the component associated with the specified index, e.g. 0 -> x, 1 -> z
+    * Return the component associated with the specified index, e.g. 0 -> x, 1 -> y, 2 -> z
     *
-    * TODO - bounds check - impact on render times?
+    * An index out of bounds will trigger an IllegalArgumentException.
+    *
+    * Note - using a pattern match is negligibly slower than using if .. else however either is considerably faster
+    *        than using a collection and accessing by index.
     *
     * @param i
     * @return
     */
-  def get(i: Int) =
-    // This looks clunky but is faster than using a collection
-    if (i == 0) x
-    else if (i == 1) y
-    else z
+  def get(i: Int) = i match {
+    case 0 => x
+    case 1 => y
+    case 2 => z
+    case n => throw new IllegalArgumentException(s"index $n is out of bounds 0-2")
+  }
 
   // Alias the x, y, z values.
   val r: Double = x
