@@ -12,9 +12,8 @@ class BoundingVolumeHierarchy(val node: List[Hitable],
 
   // TODO - this is very slow - why?
   override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
-//    println("bvh.hit()")
+    // TODO - introducing tMin, tMax here seems to have introduced a clipping bug in the static scene
     if (box.hit(ray, tMin, tMax)) {
-//      println("Box hit - true")
       val hitLeft = left.hit(ray, tMin, tMax)
       val hitRight = right.hit(ray, tMin, tMax)
       (hitLeft, hitRight) match {
@@ -25,7 +24,6 @@ class BoundingVolumeHierarchy(val node: List[Hitable],
       }
     }
     else {
-//      println("Box hit - false")
       None
     }
   }
@@ -49,14 +47,11 @@ object BoundingVolumeHierarchy {
       else hitables.sortWith(compareZAxis)
 
     val (left: Hitable, right: Hitable) = sortedHitables.size match {
-      case 1 => println(s"end of recursion: hitables size 1"); (sortedHitables.head, sortedHitables.head)
-      case 2 => println(s"end of recursion: hitables size 2"); (sortedHitables.head, sortedHitables.last)
+      case 1 => (sortedHitables.head, sortedHitables.head)
+      case 2 => (sortedHitables.head, sortedHitables.last)
       case n =>
-        println(s"hitables size $n - recursing")
         val (hitablesLeft, hitablesRight) = sortedHitables.splitAt(n / 2)
-        println("Recursing on left")
         val leftNode = ofHitables(hitablesLeft, time0, time1)
-        println("Recursing on right")
         val rightNode = ofHitables(hitablesRight, time0, time1)
         (leftNode, rightNode)
     }
@@ -71,7 +66,6 @@ object BoundingVolumeHierarchy {
       case Some(b) => b
     }
 
-    println(s"creating new bvh  with node: $sortedHitables")
     new BoundingVolumeHierarchy(sortedHitables, left, right, boundingBox, time0, time1)
   }
 

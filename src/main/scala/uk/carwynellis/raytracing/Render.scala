@@ -6,10 +6,13 @@ object Render extends App {
 
   val width = 1200
   val height = 800
-  val samples = 1
+  val samples = 10
 
   val origin = Vec3(13, 2, 3)
   val target = Vec3(0, 0, 0)
+
+  val time0 = 0.0
+  val time1 = 0.2
 
   val camera = Camera(
     origin = origin,
@@ -27,10 +30,9 @@ object Render extends App {
 
   println(s"Rendering scene to $filename")
 
-  val bvh = BoundingVolumeHierarchy.ofHitables(Scene.staticScene.hitables, 0.0, 0.2)
-//  val bvh = BoundingVolumeHierarchy.ofHitables(Scene.randomScene().hitables, 0.0, 0.2)
+  val bvh = BoundingVolumeHierarchy.ofHitables(Scene.randomScene().hitables, time0, time1)
 
-  val renderer = Renderer(camera, bvh, width, height, samples)
+  val renderer = Renderer(camera, Scene.randomScene(), width, height, samples)
   val imageWriter = ImageWriter(width, height, "image.ppm")
 
   renderer.renderScene().foreach(imageWriter.writePixel)

@@ -11,20 +11,19 @@ package uk.carwynellis.raytracing
   */
 case class Vec3(x: Double, y: Double, z: Double) {
 
-  // For now allow emulation of the array index style.
-  private def components = Seq(x, y, z)
-
   /**
     * Return the component associated with the specified index, e.g. 0 -> x, 1 -> z
     *
-    * This allows existing algorithms to be ported easily.
-    *
-    * TODO - look into alternative approaches
+    * TODO - bounds check - impact on render times?
     *
     * @param i
     * @return
     */
-  def get(i: Int) = components(i)
+  def get(i: Int) =
+    // This looks clunky but is faster than using a collection
+    if (i == 0) x
+    else if (i == 1) y
+    else z
 
   // Alias the x, y, z values.
   val r: Double = x
