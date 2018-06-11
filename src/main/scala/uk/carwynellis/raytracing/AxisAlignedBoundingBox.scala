@@ -42,7 +42,7 @@ class AxisAlignedBoundingBox(val min: Vec3, val max: Vec3) {
       else loop(i + 1, sMin, sMax)
     }
 
-    loop(0, Double.MinValue, Double.MaxValue)
+    loop(0, tMin, tMax)
   }
 
 }
