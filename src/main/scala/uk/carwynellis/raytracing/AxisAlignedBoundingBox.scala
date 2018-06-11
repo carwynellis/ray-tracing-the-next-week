@@ -17,36 +17,32 @@ class AxisAlignedBoundingBox(val min: Vec3, val max: Vec3) {
   /**
     * Determine whether a given ray has hit the bounding box or not.
     *
+    * Note that this is a slightly faster algorithm offered as an alternative in the book and credited to Andrew Kensler
+    * at Pixar.
+    *
     * @param ray
+    * @param tMin
+    * @param tMax
     * @return
     */
   def hit(ray: Ray, tMin: Double, tMax: Double): Boolean = {
     @tailrec
     def loop(i: Int, lMin: Double, lMax: Double): Boolean = {
-      if (i >= 3) {
-//        println(s"AABB.hit() returning true")
-        true
-      }
-      else {
-//        println(s"AABB.hit() index $i")
-        val iMin = (min.get(i) - ray.origin.get(i)) / ray.direction.get(i)
-        val iMax = (max.get(i) - ray.origin.get(i)) / ray.direction.get(i)
+      val invD = 1.0 / ray.direction.get(i)
+      val t0 = (min.get(i) - ray.origin.get(i)) * invD
+      val t1 = (max.get(i) - ray.origin.get(i)) * invD
 
-        val t0 = minD(iMin, iMax)
-        val t1 = maxD(iMin, iMax)
+      val (s0, s1) = if (invD < 0.0) (t1, t0) else (t0, t1)
 
-        val sMin = maxD(t0, lMin)
-        val sMax = minD(t1, lMax)
+      val sMin = if (s0 > lMin) s0 else lMin
+      val sMax = if (s1 < lMax) s1 else lMax
 
-        if (sMax <= sMin) {
-//          println(s"AABB.hit() index $i - returning false")
-          false
-        }
-        else loop(i + 1, sMin, sMax)
-      }
+      if (sMax <= sMin) false
+      else if (i == 2) true
+      else loop(i + 1, sMin, sMax)
     }
 
-    loop(0, tMin, tMax)
+    loop(0, Double.MinValue, Double.MaxValue)
   }
 
 }
