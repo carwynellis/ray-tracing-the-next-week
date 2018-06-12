@@ -2,10 +2,11 @@ package uk.carwynellis.raytracing.material
 
 import uk.carwynellis.raytracing._
 import uk.carwynellis.raytracing.hitable.Sphere
+import uk.carwynellis.raytracing.texture.{ConstantTexture, Texture}
 
 // TODO - move into a material package and split out into separate files
 
-abstract class Material(val albedo: Vec3) {
+abstract class Material(val albedo: Texture) {
 
   def scatter(rayIn: Ray, record: HitRecord): Ray
 
@@ -17,7 +18,7 @@ object Material {
 
 }
 
-class Lambertian(albedo: Vec3) extends Material(albedo) {
+class Lambertian(albedo: Texture) extends Material(albedo) {
   override def scatter(rayIn: Ray, record: HitRecord): Ray = {
     val target = record.p + record.normal + Sphere.randomPointInUnitSphere()
     Ray(record.p, target - record.p, rayIn.time)
@@ -25,10 +26,10 @@ class Lambertian(albedo: Vec3) extends Material(albedo) {
 }
 
 object Lambertian {
-  def apply(albedo: Vec3) = new Lambertian(albedo)
+  def apply(albedo: Texture) = new Lambertian(albedo)
 }
 
-class Metal(albedo: Vec3, fuzziness: Double) extends Material(albedo) {
+class Metal(albedo: Texture, fuzziness: Double) extends Material(albedo) {
   override def scatter(rayIn: Ray, record: HitRecord): Ray = {
     val reflected = Material.reflect(rayIn.direction.unitVector, record.normal)
     Ray(record.p, reflected + (fuzziness * Sphere.randomPointInUnitSphere()), rayIn.time)
@@ -36,10 +37,10 @@ class Metal(albedo: Vec3, fuzziness: Double) extends Material(albedo) {
 }
 
 object Metal {
-  def apply(albedo: Vec3, fuzziness: Double) = new Metal(albedo, fuzziness)
+  def apply(albedo: Texture, fuzziness: Double) = new Metal(albedo, fuzziness)
 }
 
-class Dielectric(refractiveIndex: Double) extends Material(Vec3(1,1,1)) {
+class Dielectric(refractiveIndex: Double) extends Material(ConstantTexture(Vec3(1,1,1))) {
 
   override def scatter(rayIn: Ray, record: HitRecord): Ray = {
     val reflected = Material.reflect(rayIn.direction,record.normal)
