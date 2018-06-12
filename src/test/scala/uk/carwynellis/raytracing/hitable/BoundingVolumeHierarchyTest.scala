@@ -1,7 +1,8 @@
 package uk.carwynellis.raytracing.hitable
 
 import org.scalatest.{FunSuite, Matchers}
-import uk.carwynellis.raytracing.{Lambertian, Vec3}
+import uk.carwynellis.raytracing.Vec3
+import uk.carwynellis.raytracing.material.Lambertian
 
 class BoundingVolumeHierarchyTest extends FunSuite with Matchers {
 

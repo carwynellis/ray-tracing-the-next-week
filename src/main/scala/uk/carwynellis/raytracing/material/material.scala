@@ -1,5 +1,6 @@
-package uk.carwynellis.raytracing
+package uk.carwynellis.raytracing.material
 
+import uk.carwynellis.raytracing._
 import uk.carwynellis.raytracing.hitable.Sphere
 
 // TODO - move into a material package and split out into separate files

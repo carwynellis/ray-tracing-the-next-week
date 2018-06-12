@@ -1,6 +1,7 @@
 package uk.carwynellis.raytracing
 
 import uk.carwynellis.raytracing.hitable.{Hitable, HitableList, MovingSphere, Sphere}
+import uk.carwynellis.raytracing.material.{Dielectric, Lambertian, Metal}
 
 // TODO - replace List with Seq
 

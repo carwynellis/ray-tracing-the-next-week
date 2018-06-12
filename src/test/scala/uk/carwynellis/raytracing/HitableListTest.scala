@@ -2,6 +2,7 @@ package uk.carwynellis.raytracing
 
 import org.scalatest.{FunSuite, Matchers}
 import uk.carwynellis.raytracing.hitable.{Hitable, HitableList}
+import uk.carwynellis.raytracing.material.Material
 
 class HitableListTest extends FunSuite with Matchers {
 

@@ -1,6 +1,7 @@
 package uk.carwynellis.raytracing.hitable
 
 import uk.carwynellis.raytracing._
+import uk.carwynellis.raytracing.material.Material
 
 /**
   * Class representing a sphere in motion.
