@@ -22,7 +22,7 @@ object Material {
 class Lambertian(albedo: Texture) extends Material(albedo) {
   override def scatter(rayIn: Ray, record: HitRecord): (Ray, Vec3) = {
     val target = record.p + record.normal + Sphere.randomPointInUnitSphere()
-    (Ray(record.p, target - record.p, rayIn.time), albedo.value(0, 0))
+    (Ray(record.p, target - record.p, rayIn.time), albedo.value(0, 0, record.p))
   }
 }
 
@@ -33,7 +33,7 @@ object Lambertian {
 class Metal(albedo: Texture, fuzziness: Double) extends Material(albedo) {
   override def scatter(rayIn: Ray, record: HitRecord): (Ray, Vec3) = {
     val reflected = Material.reflect(rayIn.direction.unitVector, record.normal)
-    (Ray(record.p, reflected + (fuzziness * Sphere.randomPointInUnitSphere()), rayIn.time), albedo.value(0, 0))
+    (Ray(record.p, reflected + (fuzziness * Sphere.randomPointInUnitSphere()), rayIn.time), albedo.value(0, 0, record.p))
   }
 }
 
@@ -61,7 +61,7 @@ class Dielectric(refractiveIndex: Double) extends Material(ConstantTexture(Vec3(
     val rayOut = if (math.random() < reflectionProbability) Ray(record.p, reflected, rayIn.time)
     else Ray(record.p, refracted, rayIn.time)
 
-    (rayOut, albedo.value(0, 0))
+    (rayOut, albedo.value(0, 0, record.p))
   }
 
   private def refract(v: Vec3, n: Vec3, niOverNt: Double): Vec3 = {

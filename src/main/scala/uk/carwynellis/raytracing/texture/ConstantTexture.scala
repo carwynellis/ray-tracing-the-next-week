@@ -4,7 +4,7 @@ import uk.carwynellis.raytracing.Vec3
 
 class ConstantTexture(color: Vec3) extends Texture {
 
-  override def value(u: Double, v: Double): Vec3 = color
+  override def value(u: Double, v: Double, p: Vec3): Vec3 = color
 
 }
 

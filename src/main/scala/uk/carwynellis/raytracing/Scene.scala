@@ -2,7 +2,7 @@ package uk.carwynellis.raytracing
 
 import uk.carwynellis.raytracing.hitable.{Hitable, HitableList, MovingSphere, Sphere}
 import uk.carwynellis.raytracing.material.{Dielectric, Lambertian, Metal}
-import uk.carwynellis.raytracing.texture.ConstantTexture
+import uk.carwynellis.raytracing.texture.{CheckerBoard, ConstantTexture}
 
 // TODO - replace List with Seq
 
@@ -60,8 +60,13 @@ object Scene {
     }
     else None
 
+    val checkerboard = CheckerBoard(
+      odd = ConstantTexture(Vec3(0.1, 0.1, 0.3)),
+      even = ConstantTexture(Vec3(0.9, 0.9, 0.9))
+    )
+
     val scene = List(
-      Sphere(Vec3(0, -1000, 0), 1000, Lambertian(ConstantTexture(Vec3(0.5, 0.5, 0.5)))),
+      Sphere(Vec3(0, -1000, 0), 1000, Lambertian(checkerboard)),
       Sphere(Vec3(0, 1, 0), 1, Dielectric(1.5)),
       Sphere(Vec3(-4, 1, 0), 1, Lambertian(ConstantTexture(Vec3(0.4, 0.2, 0.1)))),
       Sphere(Vec3(4, 1, 0), 1, Metal(ConstantTexture(Vec3(0.7, 0.6, 0.5)), 0))
