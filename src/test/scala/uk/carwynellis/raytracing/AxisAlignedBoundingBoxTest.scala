@@ -15,7 +15,7 @@ class AxisAlignedBoundingBoxTest extends FunSuite with Matchers {
       direction = Vec3(1, 1, 1)
     )
 
-    underTest.hit(ray) shouldBe true
+    underTest.hit(ray, 0, 0.5) shouldBe true
   }
 
   test("hit returns false for ray outside bounding box") {
@@ -24,7 +24,7 @@ class AxisAlignedBoundingBoxTest extends FunSuite with Matchers {
       direction = Vec3(0, 0, 0)
     )
 
-    underTest.hit(ray) shouldBe false
+    underTest.hit(ray, 0, 0) shouldBe false
   }
 
 }

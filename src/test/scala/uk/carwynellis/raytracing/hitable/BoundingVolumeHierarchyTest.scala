@@ -3,19 +3,20 @@ package uk.carwynellis.raytracing.hitable
 import org.scalatest.{FunSuite, Matchers}
 import uk.carwynellis.raytracing.Vec3
 import uk.carwynellis.raytracing.material.Lambertian
+import uk.carwynellis.raytracing.texture.ConstantTexture
 
 class BoundingVolumeHierarchyTest extends FunSuite with Matchers {
 
-  private val sphere = Sphere(Vec3(0,0,0), 1.0, Lambertian(Vec3(0, 0, 0)))
-  private val anotherSphere = Sphere(Vec3(1,2,3), 5.0, Lambertian(Vec3(4, 4, 4)))
+  private val sphere = Sphere(Vec3(0,0,0), 1.0, Lambertian(ConstantTexture(Vec3(0, 0, 0))))
+  private val anotherSphere = Sphere(Vec3(1,2,3), 5.0, Lambertian(ConstantTexture(Vec3(4, 4, 4))))
 
   test("should build a node with both child nodes set to the single element for a list of a single hitable") {
     val hitables = List(sphere)
 
     val result = BoundingVolumeHierarchy.ofHitables(hitables, 0, 0)
 
-    result.left shouldBe None
-    result.right shouldBe None
+    result.left shouldBe sphere
+    result.right shouldBe sphere
   }
 
   test("should build a single node with left node set to first element and right node set to second for list of two hitables") {
@@ -23,8 +24,8 @@ class BoundingVolumeHierarchyTest extends FunSuite with Matchers {
 
     val result = BoundingVolumeHierarchy.ofHitables(hitables, 0, 0)
 
-    result.left shouldBe Some(sphere)
-    result.right shouldBe Some(anotherSphere)
+    result.left shouldBe anotherSphere
+    result.right shouldBe sphere
   }
 
   test("should build a tree from a list of hitables") {
@@ -32,9 +33,7 @@ class BoundingVolumeHierarchyTest extends FunSuite with Matchers {
 
     val result = BoundingVolumeHierarchy.ofHitables(hitables, 0, 0)
 
-    // TODO - inspect result properly - this is a quick cludge to check the recursion terminates correctly
-    result.left.isDefined shouldBe true
-    result.right.isDefined shouldBe true
+    // TODO - inspect the result - this is a cludge to check that the recursion terminates correctly
   }
 
 }

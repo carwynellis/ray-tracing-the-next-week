@@ -3,11 +3,12 @@ package uk.carwynellis.raytracing
 import org.scalatest.{FunSuite, Matchers}
 import uk.carwynellis.raytracing.hitable.{Hitable, HitableList}
 import uk.carwynellis.raytracing.material.Material
+import uk.carwynellis.raytracing.texture.ConstantTexture
 
 class HitableListTest extends FunSuite with Matchers {
 
-  class DummyMaterial() extends Material(Vec3(1,1,1)) {
-    override def scatter(rayIn: Ray, record: HitRecord): Ray = ???
+  class DummyMaterial() extends Material(ConstantTexture(Vec3(1,1,1))) {
+    override def scatter(rayIn: Ray, record: HitRecord) = ???
   }
 
   case class DummyHitable(hit: Boolean) extends Hitable {
