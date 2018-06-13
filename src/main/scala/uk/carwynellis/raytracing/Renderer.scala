@@ -23,8 +23,8 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
     hitResult match {
       case Some(hit) =>
         if (depth < 50) {
-          val scattered = hit.material.scatter(r, hit)
-          hit.material.albedo * color(scattered, world, depth + 1)
+          val (scattered, attenuation) = hit.material.scatter(r, hit)
+          attenuation * color(scattered, world, depth + 1)
         }
         else Vec3(0, 0, 0)
       case None =>

@@ -2,15 +2,16 @@ package uk.carwynellis.raytracing
 
 import uk.carwynellis.raytracing.hitable.{Hitable, HitableList, MovingSphere, Sphere}
 import uk.carwynellis.raytracing.material.{Dielectric, Lambertian, Metal}
+import uk.carwynellis.raytracing.texture.ConstantTexture
 
 // TODO - replace List with Seq
 
 object Scene {
 
   val staticScene = HitableList(List(
-    Sphere(Vec3(0, 0, -1), 0.5, Lambertian(Vec3(0.5, 0.5, 0.6))),
-    Sphere(Vec3(0, -100.5, -1), 100, Lambertian(Vec3(0.8, 0.8, 0.0))),
-    Sphere(Vec3(1, 0, -1), 0.5, Metal(Vec3(0.8, 0.6, 0.2), 0.3)),
+    Sphere(Vec3(0, 0, -1), 0.5, Lambertian(ConstantTexture(Vec3(0.5, 0.5, 0.6)))),
+    Sphere(Vec3(0, -100.5, -1), 100, Lambertian(ConstantTexture(Vec3(0.8, 0.8, 0.0)))),
+    Sphere(Vec3(1, 0, -1), 0.5, Metal(ConstantTexture(Vec3(0.8, 0.6, 0.2)), 0.3)),
     Sphere(Vec3(-1, 0, -1), -0.5, Dielectric(1.5))
   ))
 
@@ -44,13 +45,13 @@ object Scene {
           radius = 0.2,
           time0 = 0.0,
           time1 = 1.0,
-          material = Lambertian(Vec3(math.random(), math.random(), math.random()))
+          material = Lambertian(ConstantTexture(Vec3(math.random(), math.random(), math.random())))
         ))
       else if (m < 0.95) {
         def randomColor = 0.5 * (1 + math.random())
         Some(Sphere(c, 0.2,
           Metal(
-            Vec3(randomColor, randomColor, randomColor),
+            ConstantTexture(Vec3(randomColor, randomColor, randomColor)),
             0.5 * math.random()
           )
         ))
@@ -60,10 +61,10 @@ object Scene {
     else None
 
     val scene = List(
-      Sphere(Vec3(0, -1000, 0), 1000, Lambertian(Vec3(0.5, 0.5, 0.5))),
+      Sphere(Vec3(0, -1000, 0), 1000, Lambertian(ConstantTexture(Vec3(0.5, 0.5, 0.5)))),
       Sphere(Vec3(0, 1, 0), 1, Dielectric(1.5)),
-      Sphere(Vec3(-4, 1, 0), 1, Lambertian(Vec3(0.4, 0.2, 0.1))),
-      Sphere(Vec3(4, 1, 0), 1, Metal(Vec3(0.7, 0.6, 0.5), 0))
+      Sphere(Vec3(-4, 1, 0), 1, Lambertian(ConstantTexture(Vec3(0.4, 0.2, 0.1)))),
+      Sphere(Vec3(4, 1, 0), 1, Metal(ConstantTexture(Vec3(0.7, 0.6, 0.5)), 0))
     ) ++ generateSpheres
     HitableList(scene)
   }
