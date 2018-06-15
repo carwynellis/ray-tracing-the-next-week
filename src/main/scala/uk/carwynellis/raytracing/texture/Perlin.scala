@@ -18,6 +18,11 @@ class Perlin {
     val v = p.y - math.floor(p.y)
     val w = p.z - math.floor(p.z)
 
+    // Use hermite cubic to smooth interpolation results.
+    val uCube = u * u * (3 - 2 * u)
+    val vCube = v * v * (3 - 2 * v)
+    val wCube = w * w * (3 - 2 * w)
+
     val i = math.floor(p.x).toInt
     val j = math.floor(p.y).toInt
     val k = math.floor(p.z).toInt
@@ -33,7 +38,7 @@ class Perlin {
       }
     }
 
-    triLinearInterpolation(c, u, v, w)
+    triLinearInterpolation(c, uCube, vCube, wCube)
   }
 
   private def generateNoise() = Seq.fill(256)(0.0).map(_ => math.random())
