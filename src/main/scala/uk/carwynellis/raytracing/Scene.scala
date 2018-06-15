@@ -17,7 +17,7 @@ object Scene {
 
   val twoPerlinSpheres = HitableList(List(
     Sphere(Vec3(0, -1000, 0), 1000, Lambertian(NoiseTexture(1))),
-    Sphere(Vec3(0, 2, 0), 2, Lambertian(NoiseTexture(10))),
+    Sphere(Vec3(0, 2, 0), 2, Lambertian(NoiseTexture(20))),
   ))
 
   def randomScene(): HitableList = {
