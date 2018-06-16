@@ -41,7 +41,7 @@ class Perlin {
   def turbulence(p: Vec3, iterations: Int = 7): Double = {
     @tailrec
     def loop(acc: Double, weight: Double, q: Vec3, count: Int): Double = {
-      if (count >= iterations) acc
+      if (count >= iterations) math.abs(acc)
       else loop(acc + weight * noise(q), weight * 0.5, q * 2, count + 1)
     }
 
