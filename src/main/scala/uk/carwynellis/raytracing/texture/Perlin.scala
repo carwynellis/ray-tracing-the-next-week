@@ -2,6 +2,7 @@ package uk.carwynellis.raytracing.texture
 
 import uk.carwynellis.raytracing.Vec3
 
+import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
 // TODO - move into noise texture?
@@ -35,6 +36,16 @@ class Perlin {
     }
 
     triLinearInterpolation(c, u, v, w)
+  }
+
+  def turbulence(p: Vec3, iterations: Int = 7): Double = {
+    @tailrec
+    def loop(acc: Double, weight: Double, q: Vec3, count: Int): Double = {
+      if (count >= iterations) acc
+      else loop(acc + weight * noise(q), weight * 0.5, q * 2, count + 1)
+    }
+
+    loop(0.0, 1.0, p, 0)
   }
 
   private def generateNoise() =

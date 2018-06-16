@@ -5,8 +5,8 @@ class NoiseTexture(scale: Double) extends Texture {
 
   private val perlinNoise = new Perlin
 
-  override def value(u: Double, v: Double, p: Vec3): Vec3 = Vec3(1, 1, 1) * perlinNoise.noise(scale * p)
-
+  override def value(u: Double, v: Double, p: Vec3): Vec3 =
+    Vec3(1, 1, 1) * 0.5 * (1 + perlinNoise.turbulence(p = scale * p))
 }
 
 object NoiseTexture {
