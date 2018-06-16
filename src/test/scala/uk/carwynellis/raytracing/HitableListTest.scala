@@ -13,7 +13,7 @@ class HitableListTest extends FunSuite with Matchers {
 
   case class DummyHitable(hit: Boolean) extends Hitable {
     override def hit(r: Ray, tMin: Double, tMax: Double): Option[HitRecord] =
-      if (hit) Some(HitRecord(0.0, Vec3(0,0,0), Vec3(0,0,0), new DummyMaterial()))
+      if (hit) Some(HitRecord(0.0, 0.0, 0.0, Vec3(0,0,0), Vec3(0,0,0), new DummyMaterial()))
       else None
 
     override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = None

@@ -42,10 +42,14 @@ class MovingSphere(val centre0: Vec3,
     if (discriminant > 0) {
       val x = (-b - discriminantRoot) / a
       if (x < tMax && x > tMin) {
+        val pointAtParameter = r.pointAtParameter(x)
+        val (u, v) = Sphere.getSphereUV((pointAtParameter - centre) / radius)
         val record = HitRecord(
           t = x,
-          p = r.pointAtParameter(x),
-          normal = (r.pointAtParameter(x) - centre) / radius,
+          u = u,
+          v = v,
+          p = pointAtParameter,
+          normal = (pointAtParameter - centre) / radius,
           material = material
         )
         return Some(record)
@@ -53,8 +57,12 @@ class MovingSphere(val centre0: Vec3,
 
       val y = (-b + discriminantRoot) / a
       if (y < tMax && y > tMin) {
+        val pointAtParameter = r.pointAtParameter(y)
+        val (u, v) = Sphere.getSphereUV((pointAtParameter - centre) / radius)
         val record = HitRecord(
           t = y,
+          u = u,
+          v = v,
           p = r.pointAtParameter(y),
           normal = (r.pointAtParameter(y) - centre) / radius,
           material = material

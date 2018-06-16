@@ -22,10 +22,14 @@ class Sphere(val centre: Vec3, val radius: Double, val material: Material) exten
     if (discriminant > 0) {
       val x = (-b - discriminantRoot) / a
       if (x < tMax && x > tMin) {
+        val pointAtParameter = r.pointAtParameter(x)
+        val (u, v) = Sphere.getSphereUV((pointAtParameter - centre) / radius)
         val record = HitRecord(
           t = x,
-          p = r.pointAtParameter(x),
-          normal = (r.pointAtParameter(x) - centre) / radius,
+          u = u,
+          v = v,
+          p = pointAtParameter,
+          normal = (pointAtParameter - centre) / radius,
           material = material
         )
         return Some(record)
@@ -33,8 +37,12 @@ class Sphere(val centre: Vec3, val radius: Double, val material: Material) exten
 
       val y = (-b + discriminantRoot) / a
       if (y < tMax && y > tMin) {
+        val pointAtParameter = r.pointAtParameter(y)
+        val (u, v) = Sphere.getSphereUV((pointAtParameter - centre) / radius)
         val record = HitRecord(
           t = y,
+          u = u,
+          v = v,
           p = r.pointAtParameter(y),
           normal = (r.pointAtParameter(y) - centre) / radius,
           material = material
@@ -68,6 +76,21 @@ object Sphere {
     )
     if (randomPoint.squaredLength >= 1) randomPointInUnitSphere()
     else randomPoint
+  }
+
+  /**
+    * To assist with image maps we need to compute a scaled image coordinate which can be used to map to a pixel on the
+    * image.
+    *
+    * @param p
+    * @return
+    */
+  def getSphereUV(p: Vec3): (Double, Double) = {
+    val phi = math.atan2(p.z, p.x)
+    val theta = math.asin(p.y)
+    val u = 1 - (phi + math.Pi) / (2 * math.Pi)
+    val v = (theta + math.Pi/2) / math.Pi
+    (u, v)
   }
 }
 

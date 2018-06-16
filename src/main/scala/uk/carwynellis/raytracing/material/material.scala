@@ -22,7 +22,7 @@ object Material {
 class Lambertian(albedo: Texture) extends Material(albedo) {
   override def scatter(rayIn: Ray, record: HitRecord): (Ray, Vec3) = {
     val target = record.p + record.normal + Sphere.randomPointInUnitSphere()
-    (Ray(record.p, target - record.p, rayIn.time), albedo.value(0, 0, record.p))
+    (Ray(record.p, target - record.p, rayIn.time), albedo.value(record.u, record.v, record.p))
   }
 }
 
