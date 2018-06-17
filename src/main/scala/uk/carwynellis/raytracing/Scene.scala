@@ -1,7 +1,7 @@
 package uk.carwynellis.raytracing
 
 import uk.carwynellis.raytracing.hitable.{Hitable, HitableList, MovingSphere, Sphere}
-import uk.carwynellis.raytracing.material.{Dielectric, Lambertian, Metal}
+import uk.carwynellis.raytracing.material.{Dielectric, DiffuseLight, Lambertian, Metal}
 import uk.carwynellis.raytracing.texture.{CheckerBoard, ConstantTexture, ImageTexture, NoiseTexture}
 
 // TODO - replace List with Seq
@@ -25,6 +25,11 @@ object Scene {
   val perlinAndImageSpheres = HitableList(List(
     Sphere(Vec3(0, -1000, 0), 1000, Lambertian(NoiseTexture(1))),
     Sphere(Vec3(0, 2, 0), 2, Lambertian(ImageTexture(imagePath)))
+  ))
+
+  val perlinAndLight = HitableList(List(
+    Sphere(Vec3(0, -1000, 0), 1000, Lambertian(NoiseTexture(1))),
+    Sphere(Vec3(0, 2, 0), 2, DiffuseLight(ConstantTexture(Vec3(4, 4, 4))))
   ))
 
   def randomScene(): HitableList = {
