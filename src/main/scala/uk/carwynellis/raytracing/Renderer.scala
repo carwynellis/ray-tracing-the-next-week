@@ -25,7 +25,8 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
     hitResult match {
       case Some(hit) =>
         val emitted = hit.material.emitted(hit.u, hit.v, hit.p)
-        if (depth < 50) {
+        // TODO - scatter should return a boolean to indicate that we can ignore scattering
+        if (depth < 50 && emitted == BlackBackground) {
           val (scattered, attenuation) = hit.material.scatter(r, hit)
           emitted + attenuation * color(scattered, world, depth + 1)
         }
