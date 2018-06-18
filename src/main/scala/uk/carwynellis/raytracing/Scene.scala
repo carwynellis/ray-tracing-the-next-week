@@ -35,6 +35,7 @@ object Scene {
   val simpleLightScene = HitableList(List(
     Sphere(Vec3(0, -1000, 0), 1000, Lambertian(NoiseTexture(4))),
     Sphere(Vec3(0, 2, 0), 2, Lambertian(NoiseTexture(4))),
+    Sphere(Vec3(0, 7, 0), 2, DiffuseLight(ConstantTexture(Vec3(4, 4, 4)))),
     SimpleRectangle(3, 5, 1, 3, -2, DiffuseLight(ConstantTexture(Vec3(4, 4, 4))))
   ))
 

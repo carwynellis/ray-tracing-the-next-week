@@ -5,7 +5,7 @@ import uk.carwynellis.raytracing.texture.Texture
 
 class DiffuseLight(emit: Texture) extends Material(emit) {
 
-  override def scatter(rayIn: Ray, record: HitRecord): (Ray, Vec3) = (rayIn, Vec3(0, 0, 0))
+  override def scatter(rayIn: Ray, record: HitRecord): Option[(Ray, Vec3)] = None
 
   override def emitted(u: Double, v: Double, p: Vec3): Vec3 = emit.value(u, v, p)
 

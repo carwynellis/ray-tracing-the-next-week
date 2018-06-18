@@ -6,7 +6,7 @@ import uk.carwynellis.raytracing.texture.Texture
 abstract class Material(val albedo: Texture) {
 
   // TODO - for now scatter returns a tuple of Ray and Vec3 (where the Vec3 is the attenuation) - this could be refined.
-  def scatter(rayIn: Ray, record: HitRecord): (Ray, Vec3)
+  def scatter(rayIn: Ray, record: HitRecord): Option[(Ray, Vec3)]
 
   /**
     * Default emitted implementation that returns black.

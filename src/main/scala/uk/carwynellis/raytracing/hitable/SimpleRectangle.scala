@@ -13,8 +13,8 @@ class SimpleRectangle(val x0: Double,
     val t = (k - r.origin.z) / r.direction.z
     if (t < tMin || t> tMax) None
     else {
-      val x = r.origin.x + t * r.direction.x
-      val y = r.origin.y + t * r.direction.y
+      val x = r.origin.x + (t * r.direction.x)
+      val y = r.origin.y + (t * r.direction.y)
       if (x < x0 || x > x1 || y < y0 || y > y1) None
       else Some(HitRecord(
         t = t,
