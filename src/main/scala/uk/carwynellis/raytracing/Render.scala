@@ -12,7 +12,7 @@ object Render extends App {
   val target = Vec3(278, 278, 0)
 
   val time0 = 0.0
-  val time1 = 0.0
+  val time1 = 0.2
 
   val camera = Camera(
     origin = origin,
@@ -31,7 +31,7 @@ object Render extends App {
   println(s"Rendering scene to $filename")
 
   val bvh = BoundingVolumeHierarchy
-    .ofHitables(Scene.simpleLightScene.hitables, time0, time1)
+    .ofHitables(Scene.cornellBox.hitables, time0, time1)
 
   val renderer = Renderer(camera, bvh, width, height, samples)
   val imageWriter = ImageWriter(width, height, "image.ppm")

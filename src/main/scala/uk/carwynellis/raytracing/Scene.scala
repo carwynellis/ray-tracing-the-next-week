@@ -46,11 +46,11 @@ object Scene {
     val light = DiffuseLight(ConstantTexture(Vec3(15, 15, 15)))
 
     HitableList(List(
-      YZRectangle(0, 555, 0, 555, 555, green),
+      FlipNormals(YZRectangle(0, 555, 0, 555, 555, green)),
       YZRectangle(0, 555, 0, 555, 0, red),
       XZRectangle(213, 343, 227, 332, 554, light),
       XZRectangle(0, 555, 0, 555, 0, white),
-      XYRectangle(0, 555, 0, 555, 555, white)
+      FlipNormals(XYRectangle(0, 555, 0, 555, 555, white))
     ))
   }
 
