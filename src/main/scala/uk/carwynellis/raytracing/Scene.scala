@@ -49,6 +49,7 @@ object Scene {
       FlipNormals(YZRectangle(0, 555, 0, 555, 555, green)),
       YZRectangle(0, 555, 0, 555, 0, red),
       XZRectangle(213, 343, 227, 332, 554, light),
+      FlipNormals(XZRectangle(0, 555, 0, 555, 555, white)),
       XZRectangle(0, 555, 0, 555, 0, white),
       FlipNormals(XYRectangle(0, 555, 0, 555, 555, white))
     ))
