@@ -2,12 +2,12 @@ package uk.carwynellis.raytracing.hitable
 import uk.carwynellis.raytracing.material.Material
 import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Ray, Vec3}
 
-class SimpleRectangle(val x0: Double,
-                      x1: Double,
-                      y0: Double,
-                      y1: Double,
-                      k: Double,
-                      material: Material) extends Hitable {
+class XYRectangle(val x0: Double,
+                  x1: Double,
+                  y0: Double,
+                  y1: Double,
+                  k: Double,
+                  material: Material) extends Hitable {
 
   override def hit(r: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
     val t = (k - r.origin.z) / r.direction.z
@@ -35,7 +35,7 @@ class SimpleRectangle(val x0: Double,
 
 }
 
-object SimpleRectangle {
+object XYRectangle {
   def apply(x0: Double, x1: Double, y0: Double, y1: Double, k: Double, material: Material) =
-    new SimpleRectangle(x0, x1, y0, y1, k, material)
+    new XYRectangle(x0, x1, y0, y1, k, material)
 }

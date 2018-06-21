@@ -35,9 +35,24 @@ object Scene {
   val simpleLightScene = HitableList(List(
     Sphere(Vec3(0, -1000, 0), 1000, Lambertian(NoiseTexture(4))),
     Sphere(Vec3(0, 2, 0), 2, Lambertian(NoiseTexture(4))),
-    Sphere(Vec3(0, 7, 0), 2, DiffuseLight(ConstantTexture(Vec3(4, 4, 4)))),
-    SimpleRectangle(3, 5, 1, 3, -2, DiffuseLight(ConstantTexture(Vec3(4, 4, 4))))
+    Sphere(Vec3(0, 7, 0), 2, DiffuseLight(ConstantTexture(Vec3(1, 1, 1)))),
+    XYRectangle(3, 5, 1, 3, -2, DiffuseLight(ConstantTexture(Vec3(1, 1, 1))))
   ))
+
+  val cornellBox: HitableList = {
+    val red = Lambertian(ConstantTexture(Vec3(0.65, 0.05, 0.05)))
+    val white = Lambertian(ConstantTexture(Vec3(0.73, 0.73, 0.73)))
+    val green = Lambertian(ConstantTexture(Vec3(0.12, 0.45, 0.15)))
+    val light = DiffuseLight(ConstantTexture(Vec3(15, 15, 15)))
+
+    HitableList(List(
+      YZRectangle(0, 555, 0, 555, 555, green),
+      YZRectangle(0, 555, 0, 555, 0, red),
+      XZRectangle(213, 343, 227, 332, 554, light),
+      XZRectangle(0, 555, 0, 555, 0, white),
+      XYRectangle(0, 555, 0, 555, 555, white)
+    ))
+  }
 
   def randomScene(): HitableList = {
 
