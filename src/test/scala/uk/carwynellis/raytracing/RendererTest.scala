@@ -8,10 +8,12 @@ import uk.carwynellis.raytracing.texture.ConstantTexture
 class RendererTest extends FunSuite with Matchers {
 
   // Test that replicates the generation of component values exceeding 255.
+  // This seems to be caused by having values in the light exceed 1
+  // TODO - is this accounted for in the code somehow? It doesn't seem to be in mine! :/
   test("renderer should not generate illegal pixel component values") {
     val width = 600
     val height = 400
-    val samples = 100
+    val samples = 4
 
     val origin = Vec3(278, 278, -800)
     val target = Vec3(278, 278, 0)
@@ -40,7 +42,7 @@ class RendererTest extends FunSuite with Matchers {
       XZRectangle(213, 343, 227, 332, 554, light),
     ))
 
-    val renderer = Renderer(camera, failingScene, width, height, 100)
+    val renderer = Renderer(camera, failingScene, width, height, samples)
 
     // This pixel is known to generate values out of bounds.
     val pixel = renderer.renderPixel(265, 347)
