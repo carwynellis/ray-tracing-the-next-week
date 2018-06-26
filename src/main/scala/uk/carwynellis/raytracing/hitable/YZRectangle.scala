@@ -16,11 +16,11 @@ class YZRectangle(val y0: Double,
     else {
       val y = r.origin.y + (t * r.direction.y)
       val z = r.origin.z + (t * r.direction.z)
-      if (y < y0 || y > y1 || y < z0 || y > z1) None
+      if (y < y0 || y > y1 || z < z0 || z > z1) None
       else Some(HitRecord(
         t = t,
         u = (y - y0) / (y1 - y0),
-        v = (y - z0) / (z1 - z0),
+        v = (z - z0) / (z1 - z0),
         p = r.pointAtParameter(t),
         normal = Vec3(1, 0, 0),
         material = material
