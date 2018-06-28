@@ -69,11 +69,11 @@ object Sphere {
 
   @tailrec
   def randomPointInUnitSphere(): Vec3 = {
-    val randomPoint = 2.0 * Vec3(
+    val randomPoint = (2.0 * Vec3(
       x = math.random(),
       y = math.random(),
       z = math.random()
-    )
+    )) - Vec3(1, 1, 1)
     if (randomPoint.squaredLength >= 1) randomPointInUnitSphere()
     else randomPoint
   }
