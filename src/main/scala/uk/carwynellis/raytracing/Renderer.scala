@@ -8,7 +8,7 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
   // We increase the minimum value we accept slight which yields a smoother image without visible noise.
   val ImageSmoothingLimit = 0.001
 
-  val BlackBackground = Vec3(0.05, 0.05, 0.05)
+  val BlackBackground = Vec3(0, 0, 0)
 
   // TODO - determine what this represents
   val MaximumDepth = 50
