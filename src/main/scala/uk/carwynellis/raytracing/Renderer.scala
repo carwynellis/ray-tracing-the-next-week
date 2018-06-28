@@ -8,23 +8,28 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
   // We increase the minimum value we accept slight which yields a smoother image without visible noise.
   val ImageSmoothingLimit = 0.001
 
-  val BlackBackground = Vec3(0.0, 0.0, 0.0)
+  val BlackBackground = Vec3(0.05, 0.05, 0.05)
+
+  // TODO - determine what this represents
+  val MaximumDepth = 50
 
   /**
     * Compute the color for a given ray.
     *
     * @param r
+    * @param world
+    * @param depth
     * @return
     */
   def color(r: Ray, world: Hitable, depth: Int): Vec3 = {
-
     world.hit(r, ImageSmoothingLimit, Double.MaxValue) match {
       case Some(hit) =>
         val emitted = hit.material.emitted(hit.u, hit.v, hit.p)
         hit.material.scatter(r, hit) match {
-          case Some((scattered, attenuation)) if depth < 50 =>
+          case Some((scattered, attenuation)) if depth < MaximumDepth =>
             emitted + (attenuation * color(scattered, world, depth + 1))
-          case _ => emitted
+          case _ =>
+            emitted
         }
       // If the ray hits nothing draw return black.
       case None => BlackBackground
@@ -42,8 +47,8 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
     */
   def renderPixel(x: Int, y: Int): Pixel = {
     val result = (0 until samples).map { _ =>
-      val xR = (x.toDouble + math.random()) / width
-      val yR = (y.toDouble + math.random()) / height
+      val xR = (x.toDouble + math.random()) / width.toDouble
+      val yR = (y.toDouble + math.random()) / height.toDouble
       val ray = camera.getRay(xR, yR)
       color(ray, scene, 0)
     }.reduce(_ + _) / samples

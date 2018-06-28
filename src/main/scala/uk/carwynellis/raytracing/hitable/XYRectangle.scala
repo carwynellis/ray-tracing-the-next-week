@@ -2,7 +2,7 @@ package uk.carwynellis.raytracing.hitable
 import uk.carwynellis.raytracing.material.Material
 import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Ray, Vec3}
 
-class XYRectangle(val x0: Double,
+class XYRectangle(x0: Double,
                   x1: Double,
                   y0: Double,
                   y1: Double,

@@ -6,9 +6,10 @@ import uk.carwynellis.raytracing.texture.Texture
 
 class Lambertian(albedo: Texture) extends Material(albedo) {
   override def scatter(rayIn: Ray, record: HitRecord): Option[(Ray, Vec3)] = {
-    val target = record.p + record.normal + Sphere.randomPointInUnitSphere()
-    Some((Ray(record.p, target - record.p, rayIn.time), albedo.value(record.u, record.v, record.p)))
+    val target = record.normal + Sphere.randomPointInUnitSphere()
+    Some((Ray(record.p, target, rayIn.time), albedo.value(record.u, record.v, record.p)))
   }
+
 }
 
 object Lambertian {

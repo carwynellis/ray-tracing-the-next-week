@@ -23,10 +23,10 @@ class Camera(origin: Vec3,
              time0: Double,
              time1: Double) {
 
-  private val lensRadius = aperture / 2
+  private val lensRadius = aperture / 2.0
 
-  private val theta = verticalFieldOfView * (math.Pi/180)
-  private val halfHeight = math.tan(theta/2)
+  private val theta = verticalFieldOfView * (math.Pi/180.0)
+  private val halfHeight = math.tan(theta/2.0)
   private val halfWidth = aspectRatio * halfHeight
 
   private val w = (origin - target).unitVector
@@ -36,26 +36,26 @@ class Camera(origin: Vec3,
   private val lowerLeftCorner =
     origin - (halfWidth * focusDistance * u) - (halfHeight * focusDistance * v) - (focusDistance * w)
 
-  private val horizontal = 2 * halfWidth * focusDistance * u
-  private val vertical = 2 * halfHeight * focusDistance * v
+  private val horizontal = 2.0 * halfWidth * focusDistance * u
+  private val vertical = 2.0 * halfHeight * focusDistance * v
 
   def getRay(s: Double, t: Double): Ray = {
 
     @tailrec
     def randomPointInUnitDisk(): Vec3 = {
 
-      val randomPoint = 2.0 * Vec3(
+      val randomPoint = (2.0 * Vec3(
         x = math.random(),
         y = math.random(),
         z = 0
-      ) - Vec3(1, 1, 0)
+      )) - Vec3(1, 1, 0)
 
       if (randomPoint.dot(randomPoint) >= 1.0) randomPointInUnitDisk()
       else randomPoint
     }
 
     val rd = lensRadius * randomPointInUnitDisk()
-    val offset = u * rd.x * rd.y
+    val offset = (u * rd.x) + (v * rd.y)
 
     // Compute a random time between time0 and time1 for motion blur handling.
     val rayTime = time0 + (math.random() * (time1 - time0))
