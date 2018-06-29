@@ -14,4 +14,8 @@ object FlipNormals {
 
   def apply(hitable: Hitable) = new FlipNormals(hitable)
 
+  implicit class HitableToFlipNormalsOps(h: Hitable) {
+    def flipNormals = FlipNormals(h)
+  }
+
 }

@@ -3,6 +3,7 @@ package uk.carwynellis.raytracing
 import uk.carwynellis.raytracing.hitable._
 import uk.carwynellis.raytracing.material.{Dielectric, DiffuseLight, Lambertian, Metal}
 import uk.carwynellis.raytracing.texture.{CheckerBoard, ConstantTexture, ImageTexture, NoiseTexture}
+import uk.carwynellis.raytracing.hitable.FlipNormals.HitableToFlipNormalsOps
 
 // TODO - replace List with Seq
 
@@ -46,12 +47,14 @@ object Scene {
     val light = DiffuseLight(ConstantTexture(Vec3(15, 15, 15)))
 
     HitableList(List(
-      FlipNormals(YZRectangle(0, 555, 0, 555, 555, green)),
+      YZRectangle(0, 555, 0, 555, 555, green).flipNormals,
       YZRectangle(0, 555, 0, 555, 0, red),
       XZRectangle(213, 343, 227, 332, 554, light),
-      FlipNormals(XZRectangle(0, 555, 0, 555, 555, white)),
+      XZRectangle(0, 555, 0, 555, 555, white).flipNormals,
       XZRectangle(0, 555, 0, 555, 0, white),
-      FlipNormals(XYRectangle(0, 555, 0, 555, 555, white))
+      XYRectangle(0, 555, 0, 555, 555, white).flipNormals,
+      Box(Vec3(130, 0, 65), Vec3(295, 165, 230), white),
+      Box(Vec3(265, 0, 295), Vec3(430, 330, 460), white)
     ))
   }
 
