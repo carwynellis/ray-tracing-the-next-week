@@ -1,7 +1,7 @@
 package uk.carwynellis.raytracing.hitable
 import uk.carwynellis.raytracing.material.Material
 import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Ray, Vec3}
-import uk.carwynellis.raytracing.hitable.FlipNormals.HitableToFlipNormalsOps
+import uk.carwynellis.raytracing.hitable.transform.FlipNormals.HitableToFlipNormalsOps
 
 class Box(p0: Vec3, p1: Vec3, material: Material) extends Hitable {
 

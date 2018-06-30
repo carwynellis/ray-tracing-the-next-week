@@ -1,4 +1,6 @@
-package uk.carwynellis.raytracing.hitable
+package uk.carwynellis.raytracing.hitable.transform
+
+import uk.carwynellis.raytracing.hitable.Hitable
 import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Ray}
 
 class FlipNormals(hitable: Hitable) extends Hitable {

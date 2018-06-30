@@ -3,7 +3,8 @@ package uk.carwynellis.raytracing
 import uk.carwynellis.raytracing.hitable._
 import uk.carwynellis.raytracing.material.{Dielectric, DiffuseLight, Lambertian, Metal}
 import uk.carwynellis.raytracing.texture.{CheckerBoard, ConstantTexture, ImageTexture, NoiseTexture}
-import uk.carwynellis.raytracing.hitable.FlipNormals.HitableToFlipNormalsOps
+import uk.carwynellis.raytracing.hitable.transform.FlipNormals.HitableToFlipNormalsOps
+import uk.carwynellis.raytracing.hitable.transform.{RotateY, Translate}
 
 // TODO - replace List with Seq
 
@@ -53,8 +54,8 @@ object Scene {
       XZRectangle(0, 555, 0, 555, 555, white).flipNormals,
       XZRectangle(0, 555, 0, 555, 0, white),
       XYRectangle(0, 555, 0, 555, 555, white).flipNormals,
-      Box(Vec3(130, 0, 65), Vec3(295, 165, 230), white),
-      Box(Vec3(265, 0, 295), Vec3(430, 330, 460), white)
+      Translate(RotateY(Box(Vec3(0, 0, 0), Vec3(165, 165, 165), white), -18), Vec3(130, 0, 65)),
+      Translate(RotateY(Box(Vec3(0, 0, 0), Vec3(165, 330, 165), white), 15), Vec3(265, 0, 295)),
     ))
   }
 
