@@ -25,22 +25,10 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
             val tester = Vec3(newX, y, newZ)
             (0 until 3) foreach { c =>
               if (tester.get(c) > max.get(c)) {
-                // TODO - provide a method on Vec3....
-                max = c match {
-                  case 0 => max.copy(x = tester.x)
-                  case 1 => max.copy(y = tester.y)
-                  case 2 => max.copy(z = tester.z)
-                  case _ => throw new IllegalArgumentException(s"Index $c out of bounds")
-                }
+                max = max.set(c)(tester.get(c))
               }
               if (tester.get(c) < min.get(c)) {
-                // TODO - provide a method on Vec3....
-                min = c match {
-                  case 0 => min.copy(x = tester.x)
-                  case 1 => min.copy(y = tester.y)
-                  case 2 => min.copy(z = tester.z)
-                  case _ => throw new IllegalArgumentException(s"Index $c out of bounds")
-                }
+                min = min.set(c)(tester.get(c))
               }
             }
           }

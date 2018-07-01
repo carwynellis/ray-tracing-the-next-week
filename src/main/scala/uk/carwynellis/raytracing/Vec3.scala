@@ -29,6 +29,19 @@ case class Vec3(x: Double, y: Double, z: Double) {
     case n => throw new IllegalArgumentException(s"index $n is out of bounds 0-2")
   }
 
+  /**
+    * Return a Vec3 with the value at the specified index updated.
+    *
+    * @param i
+    * @return
+    */
+  def set(i: Int)(n: Double) = i match {
+    case 0 => this.copy(x = n)
+    case 1 => this.copy(y = n)
+    case 2 => this.copy(z = n)
+    case n => throw new IllegalArgumentException(s"index $n is out of bounds 0-2")
+  }
+
   // Alias the x, y, z values.
   val r: Double = x
   val g: Double = y
