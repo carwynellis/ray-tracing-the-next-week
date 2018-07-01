@@ -39,3 +39,7 @@ class ConstantMedium(boundary: Hitable, density: Double, albedo: Texture) extend
 
   override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = boundary.boundingBox(t0, t1)
 }
+
+object ConstantMedium {
+  def apply(boundary: Hitable, density: Double, albedo: Texture) = new ConstantMedium(boundary, density, albedo)
+}
