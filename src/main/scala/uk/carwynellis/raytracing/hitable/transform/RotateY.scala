@@ -23,7 +23,7 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
             val newX = cosTheta * x + sinTheta * z
             val newZ = -sinTheta * x + cosTheta * z
             val tester = Vec3(newX, y, newZ)
-            (0 until 2) foreach { c =>
+            (0 until 3) foreach { c =>
               if (tester.get(c) > max.get(c)) {
                 // TODO - provide a method on Vec3....
                 max = c match {
