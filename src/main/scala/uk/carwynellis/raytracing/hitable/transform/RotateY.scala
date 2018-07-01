@@ -11,7 +11,7 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
   private val cosTheta = math.cos(angleRadians)
 
   private val boundingBox = p.boundingBox(0, 1).map { box =>
-      // TODO - can this be expressed without vars?
+      // TODO - express this without vars
       var min = Vec3(Double.MaxValue, Double.MaxValue, Double.MaxValue)
       var max = Vec3(Double.MinValue, Double.MinValue, Double.MinValue)
       (0 until 2) foreach { i: Int =>
@@ -24,11 +24,12 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
             val newZ = -sinTheta * x + cosTheta * z
             val tester = Vec3(newX, y, newZ)
             (0 until 3) foreach { c =>
-              if (tester.get(c) > max.get(c)) {
-                max = max.set(c)(tester.get(c))
+              val component = tester.get(c)
+              if (component > max.get(c)) {
+                max = max.set(c)(component)
               }
-              if (tester.get(c) < min.get(c)) {
-                min = min.set(c)(tester.get(c))
+              if (component < min.get(c)) {
+                min = min.set(c)(component)
               }
             }
           }
