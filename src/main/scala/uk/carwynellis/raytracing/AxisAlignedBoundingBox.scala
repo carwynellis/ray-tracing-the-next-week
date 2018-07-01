@@ -1,8 +1,6 @@
 package uk.carwynellis.raytracing
 
 import scala.annotation.tailrec
-import uk.carwynellis.raytracing.AxisAlignedBoundingBox.minD
-import uk.carwynellis.raytracing.AxisAlignedBoundingBox.maxD
 
 /**
   * Defines an axis aligned bounding box (AABB) around a set of objects.
