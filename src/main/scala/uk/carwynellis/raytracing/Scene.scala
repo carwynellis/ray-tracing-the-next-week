@@ -115,7 +115,7 @@ object Scene {
       XZRectangle(123, 423, 147, 412, 554, light),
       MovingSphere(centre, centre+Vec3(30, 0, 0), 50, Lambertian(ConstantTexture(Vec3(0.7, 0.3, 0.1))), 0, 1),
       Sphere(Vec3(260, 150, 45), 50, Dielectric(1.5)),
-      Sphere(Vec3(0, 150, 145), 50, Metal(ConstantTexture(Vec3(0.8, 0.8, 0.9)), 10)),
+      Sphere(Vec3(0, 150, 145), 50, Metal(ConstantTexture(Vec3(0.8, 0.8, 0.9)), 0.8)),
       glassSurface,
       ConstantMedium(glassSurface, 0.2, ConstantTexture(Vec3(0.2, 0.4, 0.9))),
       mist,
