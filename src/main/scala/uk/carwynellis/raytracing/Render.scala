@@ -6,13 +6,13 @@ object Render extends App {
 
   val width = 1200
   val height = 800
-  val samples = 1
+  val samples = 100
 
-  val origin = Vec3(278, 278, -800)
+  val origin = Vec3(478, 278, -600)
   val target = Vec3(278, 278, 0)
 
   val time0 = 0.0
-  val time1 = 0.2
+  val time1 = 1
 
   val camera = Camera(
     origin = origin,
