@@ -10,12 +10,11 @@ class BoundingVolumeHierarchy(val node: List[Hitable],
                               val time0: Double,
                               val time1: Double) extends Hitable {
 
-  // TODO - this is very slow - why?
-  override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
-    // TODO - introducing tMin, tMax here seems to have introduced a clipping bug in the static scene
+  override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] =
     if (box.hit(ray, tMin, tMax)) {
       val hitLeft = left.hit(ray, tMin, tMax)
       val hitRight = right.hit(ray, tMin, tMax)
+
       (hitLeft, hitRight) match {
         case (Some(l), Some(r)) => if (l.t < r.t) Some(l) else Some(r)
         case (Some(l), None) => Some(l)
@@ -26,7 +25,7 @@ class BoundingVolumeHierarchy(val node: List[Hitable],
     else {
       None
     }
-  }
+
 
   override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = Some(box)
 }

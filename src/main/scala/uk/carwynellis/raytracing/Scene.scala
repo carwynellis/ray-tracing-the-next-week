@@ -118,7 +118,6 @@ object Scene {
       Sphere(Vec3(0, 150, 145), 50, Metal(ConstantTexture(Vec3(0.8, 0.8, 0.9)), 0.8)),
       glassSurface,
       ConstantMedium(glassSurface, 0.2, ConstantTexture(Vec3(0.2, 0.4, 0.9))),
-      mist,
       ConstantMedium(mist, 0.0001, ConstantTexture(Vec3(1, 1, 1))),
       Sphere(Vec3(400, 200, 400), 100, Lambertian(ImageTexture(imagePath))),
       Sphere(Vec3(220, 280, 300), 80, Lambertian(NoiseTexture(0.1))),

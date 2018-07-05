@@ -75,29 +75,29 @@ case class Vec3(x: Double, y: Double, z: Double) {
   def unitVector: Vec3 = this / length
 
   def +(that: Vec3) = Vec3(
-    x = this.x + that.x,
-    y = this.y + that.y,
-    z = this.z + that.z
+    x + that.x,
+    y + that.y,
+    z + that.z
   )
 
   def -(that: Vec3) = Vec3(
-    x = this.x - that.x,
-    y = this.y - that.y,
-    z = this.z - that.z
+    x - that.x,
+    y - that.y,
+    z - that.z
   )
 
   def *(that: Vec3) = Vec3(
-    x = this.x * that.x,
-    y = this.y * that.y,
-    z = this.z * that.z
+    x * that.x,
+    y * that.y,
+    z * that.z
   )
 
   def *(n: Double) = Vec3(n * x, n * y, n * z)
 
   def /(that: Vec3) = Vec3(
-    x = this.x / that.x,
-    y = this.y / that.y,
-    z = this.z / that.z
+    x / that.x,
+    y / that.y,
+    z / that.z
   )
 
   def /(n: Double) = Vec3(x / n, y / n, z / n)
@@ -108,7 +108,7 @@ case class Vec3(x: Double, y: Double, z: Double) {
     * @param that
     * @return
     */
-  def dot(that: Vec3): Double = (this.x * that.x) + (this.y * that.y) + (this.z * that.z)
+  def dot(that: Vec3): Double = (x * that.x) + (y * that.y) + (z * that.z)
 
   /**
     * Computes the cross product of this vector and the specified vector.
@@ -119,9 +119,9 @@ case class Vec3(x: Double, y: Double, z: Double) {
     * @return
     */
   def cross(that: Vec3): Vec3 = Vec3(
-    x = (this.y * that.z) - (this.z * that.y),
-    y = -((this.x * that.z) - (this.z * that.x)),
-    z = (this.x * that.y) - (this.y * that.x)
+    x = (y * that.z) - (z * that.y),
+    y = -((x * that.z) - (z * that.x)),
+    z = (x * that.y) - (y * that.x)
   )
 }
 

@@ -17,9 +17,9 @@ class Sphere(val centre: Vec3, val radius: Double, val material: Material) exten
     val c = oc.dot(oc) - (radius * radius)
 
     val discriminant = (b * b) - (a * c)
-    val discriminantRoot = math.sqrt(discriminant)
 
     if (discriminant > 0) {
+      val discriminantRoot = math.sqrt(discriminant)
       val x = (-b - discriminantRoot) / a
       if (x < tMax && x > tMin) {
         val pointAtParameter = r.pointAtParameter(x)
