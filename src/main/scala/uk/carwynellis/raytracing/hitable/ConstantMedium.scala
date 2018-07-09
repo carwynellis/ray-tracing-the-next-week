@@ -24,7 +24,7 @@ class ConstantMedium(boundary: Hitable, density: Double, albedo: Texture) extend
             Some(HitRecord(
               t = hitT,
               p = r.pointAtParameter(hitT),
-              normal = Vec3(1, 0, 0), // Arbitrary value
+              normal = ConstantMedium.Normal, // Arbitrary value
               material = phaseFunction,
               // TODO - should these values be set to something else?
               u = 0.0,
@@ -42,4 +42,7 @@ class ConstantMedium(boundary: Hitable, density: Double, albedo: Texture) extend
 
 object ConstantMedium {
   def apply(boundary: Hitable, density: Double, albedo: Texture) = new ConstantMedium(boundary, density, albedo)
+
+  val Normal = Vec3(1, 0, 0)
+
 }

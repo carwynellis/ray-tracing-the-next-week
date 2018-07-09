@@ -12,20 +12,14 @@ class BoundingVolumeHierarchy(val node: List[Hitable],
 
   override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] =
     if (box.hit(ray, tMin, tMax)) {
-      val hitLeft = left.hit(ray, tMin, tMax)
-      val hitRight = right.hit(ray, tMin, tMax)
-
-      (hitLeft, hitRight) match {
+      (left.hit(ray, tMin, tMax), right.hit(ray, tMin, tMax)) match {
         case (Some(l), Some(r)) => if (l.t < r.t) Some(l) else Some(r)
         case (Some(l), None) => Some(l)
         case (None, Some(r)) => Some(r)
         case _ => None
       }
     }
-    else {
-      None
-    }
-
+    else None
 
   override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = Some(box)
 }
