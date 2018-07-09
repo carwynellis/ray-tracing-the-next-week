@@ -5,6 +5,7 @@ version := "0.1"
 scalaVersion := "2.12.6"
 
 libraryDependencies ++= Seq(
+  "org.apache.commons" % "commons-math3" % "3.6.1",
   "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 )
 
@@ -24,3 +25,7 @@ scalacOptions in (Compile, console) ~= (_.filterNot(Set(
   "-Ywarn-unused:imports",
   "-Xfatal-warnings"
 )))
+
+assemblyJarName in assembly := "raytracer.jar"
+mainClass in assembly := Some("uk.carwynellis.raytracing.Render")
+test in assembly := {}

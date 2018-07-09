@@ -1,5 +1,6 @@
 package uk.carwynellis.raytracing.hitable
 
+import org.apache.commons.math3.util.FastMath
 import uk.carwynellis.raytracing._
 import uk.carwynellis.raytracing.material.Material
 
@@ -86,11 +87,12 @@ object Sphere {
     * @return
     */
   def getSphereUV(p: Vec3): (Double, Double) = {
-    val phi = math.atan2(p.z, p.x)
-    val theta = math.asin(p.y)
+    val phi = FastMath.atan2(p.z, p.x)
+    val theta = FastMath.asin(p.y)
     val u = 1 - (phi + math.Pi) / (2 * math.Pi)
     val v = (theta + math.Pi/2) / math.Pi
     (u, v)
   }
+
 }
 

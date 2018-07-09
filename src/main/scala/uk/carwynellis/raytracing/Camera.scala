@@ -1,5 +1,7 @@
 package uk.carwynellis.raytracing
 
+import org.apache.commons.math3.util.FastMath
+
 import scala.annotation.tailrec
 
 /**
@@ -26,7 +28,7 @@ class Camera(origin: Vec3,
   private val lensRadius = aperture / 2.0
 
   private val theta = verticalFieldOfView * (math.Pi/180.0)
-  private val halfHeight = math.tan(theta/2.0)
+  private val halfHeight = FastMath.tan(theta/2.0)
   private val halfWidth = aspectRatio * halfHeight
 
   private val w = (origin - target).unitVector

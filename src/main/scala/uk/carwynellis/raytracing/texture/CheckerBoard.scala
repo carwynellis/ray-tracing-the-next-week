@@ -1,4 +1,5 @@
 package uk.carwynellis.raytracing.texture
+import org.apache.commons.math3.util.FastMath
 import uk.carwynellis.raytracing.Vec3
 
 /**
@@ -23,7 +24,7 @@ class CheckerBoard(odd: Texture, even: Texture) extends Texture {
     * @return
     */
   override def value(u: Double, v: Double, p: Vec3): Vec3 = {
-    val sines = math.sin(10 * p.x) * math.sin(10 * p.y) * math.sin(10 * p.z)
+    val sines = FastMath.sin(10 * p.x) * FastMath.sin(10 * p.y) * FastMath.sin(10 * p.z)
     if (sines < 0) odd.value(u, v, p)
     else even.value(u, v, p)
   }

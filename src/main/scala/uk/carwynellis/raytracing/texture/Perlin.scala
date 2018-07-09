@@ -1,5 +1,6 @@
 package uk.carwynellis.raytracing.texture
 
+import org.apache.commons.math3.util.FastMath
 import uk.carwynellis.raytracing.Vec3
 
 import scala.annotation.tailrec
@@ -15,14 +16,14 @@ class Perlin {
   private val randomValues = generateNoise()
 
   def noise(p: Vec3): Double = {
-    val u = p.x - math.floor(p.x)
-    val v = p.y - math.floor(p.y)
-    val w = p.z - math.floor(p.z)
+    val u = p.x - FastMath.floor(p.x)
+    val v = p.y - FastMath.floor(p.y)
+    val w = p.z - FastMath.floor(p.z)
 
 
-    val i = math.floor(p.x).toInt
-    val j = math.floor(p.y).toInt
-    val k = math.floor(p.z).toInt
+    val i = FastMath.floor(p.x).toInt
+    val j = FastMath.floor(p.y).toInt
+    val k = FastMath.floor(p.z).toInt
 
     val c = ArrayBuffer.fill(2, 2, 2)(Vec3(0, 0, 0))
 
@@ -41,7 +42,7 @@ class Perlin {
   def turbulence(p: Vec3, iterations: Int = 7): Double = {
     @tailrec
     def loop(acc: Double, weight: Double, q: Vec3, count: Int): Double = {
-      if (count >= iterations) math.abs(acc)
+      if (count >= iterations) FastMath.abs(acc)
       else loop(acc + weight * noise(q), weight * 0.5, q * 2, count + 1)
     }
 

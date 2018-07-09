@@ -1,4 +1,5 @@
 package uk.carwynellis.raytracing.texture
+import org.apache.commons.math3.util.FastMath
 import uk.carwynellis.raytracing.Vec3
 
 class NoiseTexture(scale: Double) extends Texture {
@@ -6,7 +7,7 @@ class NoiseTexture(scale: Double) extends Texture {
   private val perlinNoise = new Perlin
 
   override def value(u: Double, v: Double, p: Vec3): Vec3 =
-    Vec3(1,1,1) * 0.5 * (1 + math.sin(scale * p.x + 5 * perlinNoise.turbulence(scale * p)))
+    Vec3(1,1,1) * 0.5 * (1 + FastMath.sin(scale * p.x + 5 * perlinNoise.turbulence(scale * p)))
 }
 
 object NoiseTexture {
