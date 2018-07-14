@@ -65,10 +65,21 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
     (0 until width).map(renderPixel(_, j))
   }
 
-  def renderScenePar(): Seq[Pixel] = (height-1 to 0 by -1).par.flatMap { j: Int =>
-    showProgress(j)
-    (0 until width).map(renderPixel(_, j))
-  }.seq
+  /**
+    * Renders the entire scene returning a list of Pixels representing the rendered scene.
+    *
+    * Uses ParSeq to parallelize the render.
+    *
+    * @return
+    */
+  def renderScenePar(): Seq[Pixel] = {
+    @volatile var pos = height - 1
+    (height-1 to 0 by -1).par.flatMap { j: Int =>
+      pos -= 1
+      showProgress(pos)
+      (0 until width).map(renderPixel(_, j))
+    }.seq
+  }
 
   // Basic progress indication, updated for each horizontal line of the image.
   private def showProgress(hPos: Int): Unit = {
