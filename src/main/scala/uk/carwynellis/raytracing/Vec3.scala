@@ -1,5 +1,7 @@
 package uk.carwynellis.raytracing
 
+import org.apache.commons.math3.util.FastMath
+
 /**
   * Partial implementation of the Vec3 class from chapter 2 of ray tracing in one weekend.
   *
@@ -62,7 +64,7 @@ case class Vec3(x: Double, y: Double, z: Double) {
     *
     * @return
     */
-  def squaredLength: Double = (x * x) + (y * y) + (z * z)
+  def squaredLength: Double = FastMath.pow(x, 2) + FastMath.pow(y, 2) + FastMath.pow(z, 2)
 
   // TODO - stream operators >> and << not yet implemented.
 

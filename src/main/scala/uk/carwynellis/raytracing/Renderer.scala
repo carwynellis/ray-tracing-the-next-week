@@ -65,6 +65,11 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
     (0 until width).map(renderPixel(_, j))
   }
 
+  def renderScenePar(): Seq[Pixel] = (height-1 to 0 by -1).par.flatMap { j: Int =>
+    showProgress(j)
+    (0 until width).map(renderPixel(_, j))
+  }.seq
+
   // Basic progress indication, updated for each horizontal line of the image.
   private def showProgress(hPos: Int): Unit = {
     val percentComplete = 100 - ((hPos.toDouble / height) * 100)

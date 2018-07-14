@@ -6,7 +6,7 @@ object Render extends App {
 
   val width = 1200
   val height = 800
-  val samples = 5000
+  val samples = 10
 
   val origin = Vec3(478, 278, -600)
   val target = Vec3(278, 278, 0)
@@ -26,7 +26,7 @@ object Render extends App {
     time1 = time1
   )
 
-  val filename = "image.ppm"
+  val filename = "image2.ppm"
 
   println(s"Rendering scene to $filename")
 
@@ -34,9 +34,9 @@ object Render extends App {
     .ofHitables(Scene.finalScene.hitables, time0, time1)
 
   val renderer = Renderer(camera, bvh, width, height, samples)
-  val imageWriter = ImageWriter(width, height, "image.ppm")
+  val imageWriter = ImageWriter(width, height, filename)
 
-  renderer.renderScene().foreach(imageWriter.writePixel)
+  renderer.renderScenePar().foreach(imageWriter.writePixel)
 
   imageWriter.close()
 
