@@ -1,5 +1,7 @@
 package uk.carwynellis.raytracing
 
+import java.time.Duration
+
 import uk.carwynellis.raytracing.hitable.Hitable
 
 class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples: Int) {
@@ -60,9 +62,12 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
     *
     * @return
     */
-  def renderScene(): Seq[Pixel] = (height-1 to 0 by -1).flatMap { j: Int =>
-    showProgress(j)
-    (0 until width).map(renderPixel(_, j))
+  def renderScene(): Seq[Pixel] = {
+    val startTime = System.currentTimeMillis()
+    (height-1 to 0 by -1).flatMap { j: Int =>
+      showProgress(j, startTime)
+      (0 until width).map(renderPixel(_, j))
+    }
   }
 
   /**
@@ -73,18 +78,32 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
     * @return
     */
   def renderScenePar(): Seq[Pixel] = {
+    val startTime = System.currentTimeMillis()
     @volatile var pos = height - 1
     (height-1 to 0 by -1).par.flatMap { j: Int =>
       pos -= 1
-      showProgress(pos)
+      showProgress(pos, startTime)
       (0 until width).map(renderPixel(_, j))
     }.seq
   }
 
   // Basic progress indication, updated for each horizontal line of the image.
-  private def showProgress(hPos: Int): Unit = {
+  // Added rather crude remaining time estimation which needs work.
+  private def showProgress(hPos: Int, start: Long): Unit = {
+    val durationSeconds = (System.currentTimeMillis() - start) / 1000
     val percentComplete = 100 - ((hPos.toDouble / height) * 100)
-    printf("\r% 4d%s complete", percentComplete.toInt, "%")
+    val remainingDuration = {
+      val durationUnit = durationSeconds / percentComplete
+      Duration.ofSeconds((durationUnit * (100 - percentComplete)).toLong)
+    }
+    printf(
+      "\r% 4d%s complete - estimated time remaining %02d:%02d:%02d ",
+      percentComplete.toInt,
+      "%",
+      remainingDuration.toHours,
+      remainingDuration.toMinutes,
+      remainingDuration.getSeconds % 60
+    )
   }
 
 }

@@ -6,8 +6,6 @@ import uk.carwynellis.raytracing.texture.{CheckerBoard, ConstantTexture, ImageTe
 import uk.carwynellis.raytracing.hitable.transform.FlipNormals.HitableToFlipNormalsOps
 import uk.carwynellis.raytracing.hitable.transform.{RotateY, Translate}
 
-// TODO - replace List with Seq
-
 object Scene {
 
   val staticScene = HitableList(List(
@@ -132,7 +130,6 @@ object Scene {
 
     val range = lowerBound until upperBound
 
-    // TODO - refactor - this is a rough port of the C++ code
     def generateSpheres: List[Hitable] = range.flatMap { a =>
       range.flatMap { b =>
         val materialSelector = math.random()
@@ -146,7 +143,6 @@ object Scene {
       }
     }.toList
 
-    // TODO - refactor as above
     def generateSphere(c: Vec3, m: Double): Option[Hitable] = if ((c - Vec3(4, 0.2, 0)).length > 0.9) {
       if (m < 0.8)
         Some(MovingSphere(
