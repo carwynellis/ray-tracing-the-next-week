@@ -101,7 +101,7 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
       percentComplete.toInt,
       "%",
       remainingDuration.toHours,
-      remainingDuration.toMinutes,
+      remainingDuration.toMinutes % 60,
       remainingDuration.getSeconds % 60
     )
   }
