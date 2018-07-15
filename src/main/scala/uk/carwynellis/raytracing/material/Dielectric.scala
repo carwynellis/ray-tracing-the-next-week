@@ -1,6 +1,5 @@
 package uk.carwynellis.raytracing.material
 
-import org.apache.commons.math3.util.FastMath
 import uk.carwynellis.raytracing.{HitRecord, Ray, Vec3}
 import uk.carwynellis.raytracing.texture.ConstantTexture
 
@@ -39,7 +38,7 @@ class Dielectric(refractiveIndex: Double) extends Material(ConstantTexture(Vec3(
   private def schlick(cosine: Double): Double = {
     val r0 = (1 - refractiveIndex) / (1 + refractiveIndex)
     val r0Squared = r0 * r0
-    r0Squared + (1 - r0Squared) * FastMath.pow(1 - cosine, 5)
+    r0Squared + (1 - r0Squared) * Math.pow(1 - cosine, 5)
   }
 }
 

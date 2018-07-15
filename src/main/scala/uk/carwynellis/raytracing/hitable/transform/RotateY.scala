@@ -1,6 +1,5 @@
 package uk.carwynellis.raytracing.hitable.transform
 
-import org.apache.commons.math3.util.FastMath
 import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Ray, Vec3}
 import uk.carwynellis.raytracing.hitable.Hitable
 
@@ -8,8 +7,8 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
 
   private val angleRadians = (math.Pi / 180) * angle
 
-  private val sinTheta = FastMath.sin(angleRadians)
-  private val cosTheta = FastMath.cos(angleRadians)
+  private val sinTheta = Math.sin(angleRadians)
+  private val cosTheta = Math.cos(angleRadians)
 
   private val boundingBox = p.boundingBox(0, 1).map { box =>
       // TODO - express this without vars
