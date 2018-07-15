@@ -1,5 +1,4 @@
 package uk.carwynellis.raytracing.hitable
-import org.apache.commons.math3.util.FastMath
 import uk.carwynellis.raytracing.material.IsoTropic
 import uk.carwynellis.raytracing.texture.Texture
 import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Ray, Vec3}
@@ -19,7 +18,7 @@ class ConstantMedium(boundary: Hitable, density: Double, albedo: Texture) extend
         else {
           val boundedT1 = if (t1 < 0) 0 else t1
           val distanceInsideBoundary = (t2 - boundedT1) * r.direction.length
-          val hitDistance = -(1/density) * FastMath.log(math.random())
+          val hitDistance = -(1/density) * Math.log(math.random())
           if (hitDistance < distanceInsideBoundary) {
             val hitT: Double = boundedT1 + hitDistance / r.direction.length
             Some(HitRecord(

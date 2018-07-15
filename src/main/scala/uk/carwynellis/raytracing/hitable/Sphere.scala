@@ -1,6 +1,5 @@
 package uk.carwynellis.raytracing.hitable
 
-import org.apache.commons.math3.util.FastMath
 import uk.carwynellis.raytracing._
 import uk.carwynellis.raytracing.material.Material
 
@@ -17,7 +16,7 @@ class Sphere(val centre: Vec3, val radius: Double, val material: Material) exten
     val b = oc.dot(r.direction)
     val c = oc.dot(oc) - (radius * radius)
 
-    val discriminant = FastMath.pow(b, 2) - (a * c)
+    val discriminant = Math.pow(b, 2) - (a * c)
 
     if (discriminant > 0) {
       val discriminantRoot = math.sqrt(discriminant)
@@ -87,8 +86,8 @@ object Sphere {
     * @return
     */
   def getSphereUV(p: Vec3): (Double, Double) = {
-    val phi = FastMath.atan2(p.z, p.x)
-    val theta = FastMath.asin(p.y)
+    val phi = Math.atan2(p.z, p.x)
+    val theta = Math.asin(p.y)
     val u = 1 - (phi + math.Pi) / (2 * math.Pi)
     val v = (theta + math.Pi/2) / math.Pi
     (u, v)
