@@ -5,7 +5,7 @@ import uk.carwynellis.raytracing.texture.ConstantTexture
 
 class Dielectric(refractiveIndex: Double) extends Material(ConstantTexture(Vec3(1,1,1))) {
 
-  override def scatter(rayIn: Ray, record: HitRecord): Option[(Ray, Vec3)] = {
+  override def scatter(rayIn: Ray, record: HitRecord): Option[ScatterResult] = {
     val reflected = Material.reflect(rayIn.direction,record.normal)
 
     val (outwardNormal, niOverNt, cosine) =
@@ -23,7 +23,7 @@ class Dielectric(refractiveIndex: Double) extends Material(ConstantTexture(Vec3(
     val rayOut = if (math.random() < reflectionProbability) Ray(record.p, reflected, rayIn.time)
     else Ray(record.p, refracted, rayIn.time)
 
-    Some((rayOut, albedo.value(0, 0, record.p)))
+    Some(ScatterResult(rayOut, albedo.value(0, 0, record.p)))
   }
 
   private def refract(v: Vec3, n: Vec3, niOverNt: Double): Vec3 = {
