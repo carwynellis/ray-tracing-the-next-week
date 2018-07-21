@@ -23,11 +23,11 @@ class Sphere(val centre: Vec3, val radius: Double, val material: Material) exten
       val x = (-b - discriminantRoot) / a
       if (x < tMax && x > tMin) {
         val pointAtParameter = r.pointAtParameter(x)
-        val (u, v) = Sphere.getSphereUV((pointAtParameter - centre) / radius)
+        val normal = (pointAtParameter - centre) / radius
         val record = HitRecord(
           t = x,
-          u = u,
-          v = v,
+          u = Sphere.getSphereU(normal),
+          v = Sphere.getSphereV(normal),
           p = pointAtParameter,
           normal = (pointAtParameter - centre) / radius,
           material = material
@@ -38,11 +38,11 @@ class Sphere(val centre: Vec3, val radius: Double, val material: Material) exten
       val y = (-b + discriminantRoot) / a
       if (y < tMax && y > tMin) {
         val pointAtParameter = r.pointAtParameter(y)
-        val (u, v) = Sphere.getSphereUV((pointAtParameter - centre) / radius)
+        val normal = (pointAtParameter - centre) / radius
         val record = HitRecord(
           t = y,
-          u = u,
-          v = v,
+          u = Sphere.getSphereU(normal),
+          v = Sphere.getSphereV(normal),
           p = r.pointAtParameter(y),
           normal = (r.pointAtParameter(y) - centre) / radius,
           material = material
@@ -86,11 +86,22 @@ object Sphere {
     * @return
     */
   def getSphereUV(p: Vec3): (Double, Double) = {
+//    val phi = Math.atan2(p.z, p.x)
+//    val theta = Math.asin(p.y)
+//    val u = 1 - (phi + math.Pi) / (2 * math.Pi)
+//    val v = (theta + math.Pi/2) / math.Pi
+//    (u, v)
+    (1, 1)
+  }
+
+  def getSphereU(p: Vec3): Double = {
     val phi = Math.atan2(p.z, p.x)
+    1 - (phi + math.Pi) / (2 * math.Pi)
+  }
+
+  def getSphereV(p: Vec3): Double = {
     val theta = Math.asin(p.y)
-    val u = 1 - (phi + math.Pi) / (2 * math.Pi)
-    val v = (theta + math.Pi/2) / math.Pi
-    (u, v)
+    (theta + math.Pi/2) / math.Pi
   }
 
 }
