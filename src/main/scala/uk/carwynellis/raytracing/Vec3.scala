@@ -127,11 +127,11 @@ case class Vec3(x: Double, y: Double, z: Double) {
 
 object Vec3 {
 
-  implicit class DoubleWithVec3Ops(d: Double) {
+  implicit class DoubleWithVec3Ops(val d: Double) extends AnyVal {
     def *(v: Vec3): Vec3 = v * d
   }
 
-  implicit class Vec3ToPixelOps(v: Vec3) {
+  implicit class Vec3ToPixelOps(val v: Vec3) extends AnyVal {
     def toPixel = Pixel.fromVec3(v)
   }
 
