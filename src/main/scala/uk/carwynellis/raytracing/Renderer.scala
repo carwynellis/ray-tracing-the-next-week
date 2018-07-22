@@ -50,8 +50,8 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
     */
   def renderPixel(x: Int, y: Int): Pixel = {
     val result = (0 until samples).map { _ =>
-      val xR = (x.toDouble + math.random()) / width.toDouble
-      val yR = (y.toDouble + math.random()) / height.toDouble
+      val xR = (x.toDouble + Random.double) / width.toDouble
+      val yR = (y.toDouble + Random.double) / height.toDouble
       val ray = camera.getRay(xR, yR)
       color(ray, scene, 0)
     }.reduce(_ + _) / samples

@@ -45,8 +45,8 @@ class Camera(origin: Vec3,
     def randomPointInUnitDisk(): Vec3 = {
 
       val randomPoint = (2.0 * Vec3(
-        x = math.random(),
-        y = math.random(),
+        x = Random.double,
+        y = Random.double,
         z = 0
       )) - Vec3(1, 1, 0)
 
@@ -58,7 +58,7 @@ class Camera(origin: Vec3,
     val offset = (u * rd.x) + (v * rd.y)
 
     // Compute a random time between time0 and time1 for motion blur handling.
-    val rayTime = time0 + (math.random() * (time1 - time0))
+    val rayTime = time0 + (Random.double * (time1 - time0))
 
     Ray(
       origin = origin + offset,

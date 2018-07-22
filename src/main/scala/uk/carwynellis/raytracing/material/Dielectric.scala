@@ -1,6 +1,6 @@
 package uk.carwynellis.raytracing.material
 
-import uk.carwynellis.raytracing.{HitRecord, Ray, Vec3}
+import uk.carwynellis.raytracing.{HitRecord, Random, Ray, Vec3}
 import uk.carwynellis.raytracing.texture.ConstantTexture
 
 class Dielectric(refractiveIndex: Double) extends Material(ConstantTexture(Vec3(1,1,1))) {
@@ -20,7 +20,7 @@ class Dielectric(refractiveIndex: Double) extends Material(ConstantTexture(Vec3(
       if (refracted == rayIn.direction) 1.0
       else schlick(cosine)
 
-    val rayOut = if (math.random() < reflectionProbability) Ray(record.p, reflected, rayIn.time)
+    val rayOut = if (Random.double < reflectionProbability) Ray(record.p, reflected, rayIn.time)
     else Ray(record.p, refracted, rayIn.time)
 
     Some(ScatterResult(rayOut, albedo.value(0, 0, record.p)))

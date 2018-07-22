@@ -1,6 +1,6 @@
 package uk.carwynellis.raytracing.texture
 
-import uk.carwynellis.raytracing.Vec3
+import uk.carwynellis.raytracing.{Random, Vec3}
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
@@ -49,7 +49,7 @@ class Perlin {
   }
 
   private def generateNoise() =
-    Seq.fill(256)(0.0).map(_ => Vec3(-1 + 2 * math.random(), -1 + 2 * math.random, -1 + 2 * math.random()).unitVector)
+    Seq.fill(256)(0.0).map(_ => Vec3(-1 + 2 * Random.double, -1 + 2 * Random.double, -1 + 2 * Random.double).unitVector)
 
   private def generateIndexPermutation(): IndexedSeq[Int] = util.Random.shuffle((0 until 256).toList).toIndexedSeq
 

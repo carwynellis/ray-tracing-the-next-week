@@ -1,5 +1,5 @@
 package uk.carwynellis.raytracing.hitable
-import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Ray}
+import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Random, Ray}
 
 // TODO - review the node definition here
 //      - do we need node as the whole list or can we select the centre of the list as the node?
@@ -39,7 +39,7 @@ object BoundingVolumeHierarchy {
   // TODO - review this and see if it can be simplified
   def ofHitables(hitables: List[Hitable], time0: Double, time1: Double): BoundingVolumeHierarchy = {
 
-    val axis = (3 * math.random()).toInt
+    val axis = (3 * Random.double).toInt
 
     val sortedHitables =
       if (axis == 0)  hitables.sortWith(compareXAxis)
