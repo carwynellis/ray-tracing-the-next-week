@@ -3,6 +3,7 @@ package uk.carwynellis.raytracing
 import java.time.Duration
 
 import uk.carwynellis.raytracing.hitable.Hitable
+import uk.carwynellis.raytracing.material.ScatterResult
 
 class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples: Int) {
 
@@ -28,7 +29,7 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
       case Some(hit) =>
         val emitted = hit.material.emitted(hit.u, hit.v, hit.p)
         hit.material.scatter(r, hit) match {
-          case Some((scattered, attenuation)) if depth < MaximumDepth =>
+          case Some(ScatterResult(scattered, attenuation)) if depth < MaximumDepth =>
             emitted + (attenuation * color(scattered, world, depth + 1))
           case _ =>
             emitted
