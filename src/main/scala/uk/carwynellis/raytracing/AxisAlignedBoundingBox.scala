@@ -18,22 +18,56 @@ class AxisAlignedBoundingBox(val min: Vec3, val max: Vec3) {
     * Note that this is a slightly faster algorithm offered as an alternative in the book and credited to Andrew Kensler
     * at Pixar.
     *
+    * Notes - I've tried a mutable implementation here which also doesn't rely on tuples. However there is no
+    * appreciable increase in performance so the current implementation remains.
+    *
     * @param ray
     * @param tMin
     * @param tMax
     * @return
     */
+//  def hit(ray: Ray, tMin: Double, tMax: Double): Boolean = {
+//    @tailrec
+//    def loop(i: Int, lMin: Double, lMax: Double): Boolean = {
+//      val invD = 1.0 / ray.direction.get(i)
+//      val t0 = (min.get(i) - ray.origin.get(i)) * invD
+//      val t1 = (max.get(i) - ray.origin.get(i)) * invD
+
+//      val (s0, s1) = if (invD < 0.0) (t1, t0) else (t0, t1)
+
+//      val sMin = if (s0 > lMin) s0 else lMin
+//      val sMax = if (s1 < lMax) s1 else lMax
+
+//      if (sMax <= sMin) false
+//      else if (i == 2) true
+//      else loop(i + 1, sMin, sMax)
+//    }
+
+//    loop(0, tMin, tMax)
+//  }
+  // Alternate hit implementation without tuples
+  // Uses vars since we need to swap values conditionally.
   def hit(ray: Ray, tMin: Double, tMax: Double): Boolean = {
-    @tailrec
+
+    var temp = 0.0
+    var t0 = 0.0
+    var t1 = 0.0
+
+  @tailrec
     def loop(i: Int, lMin: Double, lMax: Double): Boolean = {
       val invD = 1.0 / ray.direction.get(i)
-      val t0 = (min.get(i) - ray.origin.get(i)) * invD
-      val t1 = (max.get(i) - ray.origin.get(i)) * invD
 
-      val (s0, s1) = if (invD < 0.0) (t1, t0) else (t0, t1)
+      t0 = (min.get(i) - ray.origin.get(i)) * invD
+      t1 = (max.get(i) - ray.origin.get(i)) * invD
 
-      val sMin = if (s0 > lMin) s0 else lMin
-      val sMax = if (s1 < lMax) s1 else lMax
+      if (invD < 0.0) {
+        temp = t0
+        t0 = t1
+        t1 = temp
+      }
+
+      val sMin = if (t0 > lMin) t0 else lMin
+      val sMax = if (t1 < lMax) t1 else lMax
 
       if (sMax <= sMin) false
       else if (i == 2) true

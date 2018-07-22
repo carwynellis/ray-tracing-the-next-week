@@ -10,16 +10,33 @@ class BoundingVolumeHierarchy(val node: List[Hitable],
                               val time0: Double,
                               val time1: Double) extends Hitable {
 
-  override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] =
+//  override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] =
+//    if (box.hit(ray, tMin, tMax)) {
+//      (left.hit(ray, tMin, tMax), right.hit(ray, tMin, tMax)) match {
+//        case (Some(l), Some(r)) => if (l.t < r.t) Some(l) else Some(r)
+//        case (Some(l), None) => Some(l)
+//        case (None, Some(r)) => Some(r)
+//        case _ => None
+//      }
+//    }
+//    else None
+
+  // Alternate hit implementation without tuples.
+  // This seems to yield a modest reduction in render times.
+  override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
     if (box.hit(ray, tMin, tMax)) {
-      (left.hit(ray, tMin, tMax), right.hit(ray, tMin, tMax)) match {
-        case (Some(l), Some(r)) => if (l.t < r.t) Some(l) else Some(r)
-        case (Some(l), None) => Some(l)
-        case (None, Some(r)) => Some(r)
-        case _ => None
+      val leftHit = left.hit(ray, tMin,tMax)
+      val rightHit = right.hit(ray, tMin, tMax)
+      if (leftHit.isDefined) {
+        if (rightHit.isDefined) {
+          if (leftHit.get.t < rightHit.get.t) leftHit else rightHit
+        }
+        else leftHit
       }
+      else rightHit
     }
     else None
+  }
 
   override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = Some(box)
 }
