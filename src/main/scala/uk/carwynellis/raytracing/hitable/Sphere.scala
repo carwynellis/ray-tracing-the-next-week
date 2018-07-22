@@ -85,20 +85,18 @@ object Sphere {
     * @param p
     * @return
     */
-  def getSphereUV(p: Vec3): (Double, Double) = {
-//    val phi = Math.atan2(p.z, p.x)
-//    val theta = Math.asin(p.y)
-//    val u = 1 - (phi + math.Pi) / (2 * math.Pi)
-//    val v = (theta + math.Pi/2) / math.Pi
-//    (u, v)
-    (1, 1)
-  }
-
   def getSphereU(p: Vec3): Double = {
     val phi = Math.atan2(p.z, p.x)
     1 - (phi + math.Pi) / (2 * math.Pi)
   }
 
+  /**
+    * To assist with image maps we need to compute a scaled image coordinate which can be used to map to a pixel on the
+    * image.
+    *
+    * @param p
+    * @return
+    */
   def getSphereV(p: Vec3): Double = {
     val theta = Math.asin(p.y)
     (theta + math.Pi/2) / math.Pi
