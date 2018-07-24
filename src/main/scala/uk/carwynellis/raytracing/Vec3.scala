@@ -1,5 +1,10 @@
 package uk.carwynellis.raytracing
 
+class VecDouble(val d: Double) extends AnyVal
+object VecDouble {
+  def apply(d: Double) = new VecDouble(d)
+}
+
 /**
   * Partial implementation of the Vec3 class from chapter 2 of ray tracing in one weekend.
   *
@@ -9,7 +14,7 @@ package uk.carwynellis.raytracing
   * @param y
   * @param z
   */
-case class Vec3(x: Double, y: Double, z: Double) {
+class Vec3(_x: VecDouble, _y: VecDouble, _z: VecDouble) {
 
   /**
     * Return the component associated with the specified index, e.g. 0 -> x, 1 -> y, 2 -> z
@@ -36,16 +41,20 @@ case class Vec3(x: Double, y: Double, z: Double) {
     * @return
     */
   def set(i: Int)(n: Double) = i match {
-    case 0 => this.copy(x = n)
-    case 1 => this.copy(y = n)
-    case 2 => this.copy(z = n)
+    case 0 => new Vec3(VecDouble(n), _y, _z)
+    case 1 => new Vec3(_x, VecDouble(n), _z)
+    case 2 => new Vec3(_x, _y, VecDouble(n))
     case n => throw new IllegalArgumentException(s"index $n is out of bounds 0-2")
   }
 
-  // Alias the x, y, z values.
-  val r: Double = x
-  val g: Double = y
-  val b: Double = z
+  def copy(x: Double = _x.d, y: Double = _y.d, z: Double = _z.d) = Vec3(x, y, z)
+
+  def x: Double = _x.d
+  def y: Double = _y.d
+  def z: Double = _z.d
+  def r: Double = x
+  def g: Double = y
+  def b: Double = z
 
   // TODO - some operators including array indexing operators not yet implemented.
   def unary_-(): Vec3 = Vec3( -x, -y, -z)
@@ -126,6 +135,8 @@ case class Vec3(x: Double, y: Double, z: Double) {
 }
 
 object Vec3 {
+
+  def apply(x: Double, y: Double, z: Double) = new Vec3(VecDouble(x), VecDouble(y), VecDouble(z))
 
   implicit class DoubleWithVec3Ops(val d: Double) extends AnyVal {
     def *(v: Vec3): Vec3 = v * d

@@ -6,7 +6,7 @@ object Render extends App {
 
   val width = 1200
   val height = 800
-  val samples = 10
+  val samples = 5000
 
   val origin = Vec3(478, 278, -600)
   val target = Vec3(278, 278, 0)
@@ -36,7 +36,7 @@ object Render extends App {
   val renderer = Renderer(camera, bvh, width, height, samples)
   val imageWriter = ImageWriter(width, height, filename)
 
-  renderer.renderScenePar().foreach(imageWriter.writePixel)
+  renderer.renderScene().foreach(imageWriter.writePixel)
 
   imageWriter.close()
 

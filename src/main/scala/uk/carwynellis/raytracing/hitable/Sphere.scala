@@ -86,8 +86,8 @@ object Sphere {
     * @return
     */
   def getSphereU(p: Vec3): Double = {
-    val phi = Math.atan2(p.z, p.x)
-    1 - (phi + math.Pi) / (2 * math.Pi)
+      val phi = Math.atan2(p.z, p.x)
+      1 - (phi + math.Pi) / (2 * math.Pi)
   }
 
   /**
