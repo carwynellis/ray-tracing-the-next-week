@@ -46,8 +46,8 @@ class MovingSphere(val centre0: Vec3,
         val normal = (pointAtParameter - centre) / radius
         val record = HitRecord(
           t = x,
-          u = Sphere.getSphereU(normal),
-          v = Sphere.getSphereV(normal),
+          u = if (material.computeTextureCoordinates) Sphere.getSphereU(normal) else 0,
+          v = if (material.computeTextureCoordinates) Sphere.getSphereV(normal) else 0,
           p = pointAtParameter,
           normal = normal,
           material = material
@@ -61,8 +61,8 @@ class MovingSphere(val centre0: Vec3,
         val normal = (pointAtParameter - centre) / radius
         val record = HitRecord(
           t = y,
-          u = Sphere.getSphereU(normal),
-          v = Sphere.getSphereV(normal),
+          u = if (material.computeTextureCoordinates) Sphere.getSphereU(normal) else 0,
+          v = if (material.computeTextureCoordinates) Sphere.getSphereV(normal) else 0,
           p = r.pointAtParameter(y),
           normal = normal,
           material = material

@@ -22,6 +22,7 @@ abstract class Material(val albedo: Texture) {
     */
   def emitted(u: Double, v: Double, p: Vec3): Vec3 = Black
 
+  def computeTextureCoordinates = albedo.requiresTextureCoordinates
 }
 
 object Material {

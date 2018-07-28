@@ -6,4 +6,11 @@ trait Texture {
 
   def value(u: Double, v: Double, p: Vec3): Vec3
 
+  /**
+    * Set to true if texture coordinates are required. This is need for example for image maps.
+    *
+    * @return
+    */
+  def requiresTextureCoordinates = false
+
 }

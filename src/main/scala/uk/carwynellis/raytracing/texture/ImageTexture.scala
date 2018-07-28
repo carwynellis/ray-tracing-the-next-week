@@ -7,6 +7,9 @@ import uk.carwynellis.raytracing.Vec3
 
 class ImageTexture(path: String) extends Texture {
 
+  // Enable texture coordinates so we can map the image to the surface of the sphere.
+  override def requiresTextureCoordinates: Boolean = true
+
   // TODO - set this elsewhere - stops 'Boot' process appearing on Mac arising from use of awt.
   System.setProperty("java.awt.headless", "true")
 
