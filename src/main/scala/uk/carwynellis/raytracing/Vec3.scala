@@ -47,7 +47,6 @@ case class Vec3(x: Double, y: Double, z: Double) {
   val g: Double = y
   val b: Double = z
 
-  // TODO - some operators including array indexing operators not yet implemented.
   def unary_-(): Vec3 = Vec3( -x, -y, -z)
   def unary_+(): Vec3 = this
 
@@ -63,8 +62,6 @@ case class Vec3(x: Double, y: Double, z: Double) {
     * @return
     */
   def squaredLength: Double = Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2)
-
-  // TODO - stream operators >> and << not yet implemented.
 
   /**
     * Generates a new vector with total length 1 maintaining the direction of the original vector.
