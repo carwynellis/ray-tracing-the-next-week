@@ -18,6 +18,6 @@ object Pixel {
     )
   }
 
-  // TODO - Temporary fudge until the real cause of the pixel values exceeding 255 is located.
+  // Prevent the computed value exceeding the maximum allowable value for the colour component.
   private def clip(d: Double) = if (d > 1) 1.0 else d
 }
