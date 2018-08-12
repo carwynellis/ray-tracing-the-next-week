@@ -13,8 +13,7 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
 
   val BlackBackground = Vec3(0, 0, 0)
 
-  // TODO - determine what this represents
-  val MaximumDepth = 50
+  val MaximumRecursionDepth = 50
 
   /**
     * Compute the color for a given ray.
@@ -29,7 +28,7 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
       case Some(hit) =>
         val emitted = hit.material.emitted(hit.u, hit.v, hit.p)
         hit.material.scatter(r, hit) match {
-          case Some(ScatterResult(scattered, attenuation)) if depth < MaximumDepth =>
+          case Some(ScatterResult(scattered, attenuation)) if depth < MaximumRecursionDepth =>
             emitted + (attenuation * color(scattered, world, depth + 1))
           case _ =>
             emitted
