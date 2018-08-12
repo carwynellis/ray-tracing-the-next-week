@@ -3,21 +3,27 @@ package uk.carwynellis.raytracing
 case class Pixel(r: Int, g: Int, b: Int)
 
 object Pixel {
-  def fromVec3(v: Vec3): Pixel = {
-    // Gamma correct the current pixel using gamma2 e.g. sqrt of each component.
-    val gammaCorrected = Vec3(
-      x = clip(math.sqrt(v.x)),
-      y = clip(math.sqrt(v.y)),
-      z = clip(math.sqrt(v.z))
-    )
 
+  // Maximum value per colour component.
+  private val MaxComponentValue = 255.99
+
+  def fromVec3(v: Vec3): Pixel = {
     new Pixel(
-      r = (255.99 * gammaCorrected.x).toInt,
-      g = (255.99 * gammaCorrected.y).toInt,
-      b = (255.99 * gammaCorrected.z).toInt
+      r = v.x.componentValue,
+      g = v.y.componentValue,
+      b = v.z.componentValue
     )
   }
 
-  // Prevent the computed value exceeding the maximum allowable value for the colour component.
-  private def clip(d: Double) = if (d > 1) 1.0 else d
+  private implicit class ComponentOps(val d: Double) extends AnyVal {
+    // Gamma correct a component value using gamma2, e.g square root of the component value.
+    def gammaCorrected: Double = clip(math.sqrt(d))
+
+    // Compute the integer colour comopnent value e.g 1.0 would be 255
+    def componentValue: Int = (d.gammaCorrected * MaxComponentValue).toInt
+
+    // Prevent the computed value exceeding the maximum allowable value for the colour component.
+    private def clip(d: Double) = if (d > 1) 1.0 else d
+  }
+
 }
