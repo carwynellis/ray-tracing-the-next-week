@@ -13,6 +13,12 @@ class Perlin {
 
   private val randomValues = generateNoise()
 
+  private val indices = for {
+    i <- 0 until 2
+    j <- 0 until 2
+    k <- 0 until 2
+  } yield (i, j, k)
+
   def noise(p: Vec3): Double = {
     val u = p.x - Math.floor(p.x)
     val v = p.y - Math.floor(p.y)
@@ -25,13 +31,9 @@ class Perlin {
 
     val c = ArrayBuffer.fill(2, 2, 2)(Vec3(0, 0, 0))
 
-    (0 until 2).foreach { di =>
-      (0 until 2).foreach { dj =>
-        (0 until 2).foreach { dk =>
-          c(di)(dj)(dk) =
-            randomValues(xPermutations((i + di) & 255) ^ yPermutations((j + dj) & 255) ^ zPermutations((k + dk) & 255))
-        }
-      }
+    indices.foreach { case (di, dj, dk) =>
+      c(di)(dj)(dk) =
+        randomValues(xPermutations((i + di) & 255) ^ yPermutations((j + dj) & 255) ^ zPermutations((k + dk) & 255))
     }
 
     triLinearInterpolation(c, u, v, w)
@@ -62,13 +64,7 @@ class Perlin {
     val vv = v * v * (3 - 2 * v)
     val ww = w * w * (3 - 2 * w)
 
-    val permutations = for {
-      i <- 0 until 2
-      j <- 0 until 2
-      k <- 0 until 2
-    } yield (i, j, k)
-
-    permutations.foreach { case (i, j, k) =>
+    indices.foreach { case (i, j, k) =>
       val weight = Vec3(u-i, v-j, w-k)
       accumulator = accumulator +
         ((i * uu + ((1 - i) * (1 - uu))) *
