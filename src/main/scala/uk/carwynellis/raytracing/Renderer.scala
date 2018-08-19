@@ -96,13 +96,17 @@ class Renderer(camera: Camera, scene: Hitable, width: Int, height: Int, samples:
       val durationUnit = durationSeconds / percentComplete
       Duration.ofSeconds((durationUnit * (100 - percentComplete)).toLong)
     }
+    val elapsedDuration = Duration.ofSeconds(durationSeconds)
     printf(
-      "\r% 4d%s complete - estimated time remaining %02d:%02d:%02d ",
+      "\r% 4d%s complete - estimated time remaining %02d:%02d:%02d - elapsed %02d:%02d:%02d",
       percentComplete.toInt,
       "%",
       remainingDuration.toHours,
       remainingDuration.toMinutes % 60,
-      remainingDuration.getSeconds % 60
+      remainingDuration.getSeconds % 60,
+      elapsedDuration.toHours,
+      elapsedDuration.toMinutes % 60,
+      elapsedDuration.getSeconds % 60
     )
   }
 
