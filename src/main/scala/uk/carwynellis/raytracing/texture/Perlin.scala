@@ -5,7 +5,6 @@ import uk.carwynellis.raytracing.{Random, Vec3}
 import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
-// TODO - move into noise texture?
 class Perlin {
 
   private val xPermutations = generateIndexPermutation()
@@ -53,8 +52,6 @@ class Perlin {
 
   private def generateIndexPermutation(): IndexedSeq[Int] = util.Random.shuffle((0 until 256).toList).toIndexedSeq
 
-  // TODO - better way to express this in scala - it's more or less a straight port of the original C code
-  // TODO - a for comp might do this quite nicely
   private def triLinearInterpolation(c: IndexedSeq[IndexedSeq[IndexedSeq[Vec3]]],
                                      u: Double, v: Double, w: Double) = {
 
@@ -65,17 +62,19 @@ class Perlin {
     val vv = v * v * (3 - 2 * v)
     val ww = w * w * (3 - 2 * w)
 
-    (0 until 2).foreach { i =>
-      (0 until 2).foreach { j =>
-        (0 until 2).foreach { k =>
-          val weight = Vec3(u-i, v-j, w-k)
-          accumulator = accumulator +
-            ((i * uu + ((1 - i) * (1 - uu))) *
-            (j * vv + ((1 - j) * (1 - vv))) *
-            (k * ww + ((1 - k) * (1 - ww))) *
-            c(i)(j)(k).dot(weight))
-        }
-      }
+    val permutations = for {
+      i <- 0 until 2
+      j <- 0 until 2
+      k <- 0 until 2
+    } yield (i, j, k)
+
+    permutations.foreach { case (i, j, k) =>
+      val weight = Vec3(u-i, v-j, w-k)
+      accumulator = accumulator +
+        ((i * uu + ((1 - i) * (1 - uu))) *
+        (j * vv + ((1 - j) * (1 - vv))) *
+        (k * ww + ((1 - k) * (1 - ww))) *
+        c(i)(j)(k).dot(weight))
     }
 
     accumulator
