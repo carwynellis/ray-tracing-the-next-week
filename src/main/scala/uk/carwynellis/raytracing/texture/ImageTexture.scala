@@ -31,10 +31,12 @@ class ImageTexture(image: BufferedImage) extends Texture {
     // Note - vertical direction of image inverted, e.g. 1 is top, 0 is bottom.
     def toY = toBoundedImageCoordinate(1 - d, height)
 
-    private def toBoundedImageCoordinate(c: Double, max: Int): Int =
-    if (c < 0) 0
-    else if (c > max - 1) max - 1
-    else c.toInt
+    private def toBoundedImageCoordinate(c: Double, max: Int): Int = {
+      val coord = c * max
+      if (coord < 0) 0
+      else if (coord > max - 1) max - 1
+      else coord.toInt
+    }
   }
 
 }
