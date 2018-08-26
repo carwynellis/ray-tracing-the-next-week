@@ -4,9 +4,6 @@ import uk.carwynellis.raytracing.hitable.BoundingVolumeHierarchy
 
 object Render extends App {
 
-  // Run headless to prevent Boot process appearing and stealing focus.
-  System.setProperty("java.awt.headless", "true")
-
   val width = 1200
   val height = 800
   val samples = 10

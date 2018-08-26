@@ -1,29 +1,32 @@
 package uk.carwynellis.raytracing.texture
 import java.awt.Color
+import java.awt.image.BufferedImage
 import java.io.File
 
 import javax.imageio.ImageIO
 import uk.carwynellis.raytracing.Vec3
 
-class ImageTexture(path: String) extends Texture {
+class ImageTexture(image: BufferedImage) extends Texture {
 
   // Enable texture coordinates so we can map the image to the surface of the sphere.
   override def requiresTextureCoordinates: Boolean = true
 
-  // TODO - this can throw
-  private val image = ImageIO.read(new File(path))
+  private val width = image.getWidth()
+  private val height = image.getHeight()
 
-  override def value(u: Double, v: Double, p: Vec3): Vec3 = {
+  // TODO - clean up the API to remove the Vec3 here?
+  // Note, coords map the image from top left (0, 1) to bottom right (1, 0).
+  override def value(u: Double, v: Double, notUsed: Vec3): Vec3 = {
     val i: Int = {
-      val t = u * image.getWidth()
+      val t = u * width
       if (t < 0) 0
-      else if (t > image.getWidth() - 1) image.getWidth() - 1
+      else if (t > width - 1) width - 1
       else t.toInt
     }
     val j: Int = {
-      val t = (1 - v) * image.getHeight() - 0.001
+      val t = (1 - v) * height - 0.001
       if (t < 0) 0
-      else if (t > image.getHeight() - 1) image.getHeight() - 1
+      else if (t > height - 1) height - 1
       else t.toInt
     }
 
@@ -40,7 +43,12 @@ class ImageTexture(path: String) extends Texture {
 
 object ImageTexture {
 
-  // TODO - maybe pass a Buffered image and have this method take care of loading...
-  def apply(path: String) = new ImageTexture(path)
+  // Run headless to prevent Boot process appearing and stealing focus.
+  System.setProperty("java.awt.headless", "true")
+
+  // TODO - this can throw
+  def apply(path: String) = new ImageTexture(ImageIO.read(new File(path)))
+
+  def apply(image: BufferedImage) = new ImageTexture(image)
 
 }
