@@ -3,8 +3,7 @@ import uk.carwynellis.raytracing.material.IsoTropic
 import uk.carwynellis.raytracing.texture.Texture
 import uk.carwynellis.raytracing._
 
-// TODO - any value in differentiating materials from functions?
-class ConstantMedium(boundary: Hitable, density: Double, albedo: Texture) extends Hitable {
+class ConstantMedium(boundary: Hitable, density: Double, albedo: Texture, randomDouble: () => Double) extends Hitable {
 
   private val phaseFunction = IsoTropic(albedo)
 
@@ -18,7 +17,7 @@ class ConstantMedium(boundary: Hitable, density: Double, albedo: Texture) extend
         else {
           val boundedT1 = if (t1 < 0) 0 else t1
           val distanceInsideBoundary = (t2 - boundedT1) * r.direction.length
-          val hitDistance = -(1/density) * Math.log(Random.double)
+          val hitDistance = -(1/density) * Math.log(randomDouble())
           if (hitDistance < distanceInsideBoundary) {
             val hitT: Double = boundedT1 + hitDistance / r.direction.length
             Some(HitRecord(
@@ -26,7 +25,6 @@ class ConstantMedium(boundary: Hitable, density: Double, albedo: Texture) extend
               p = r.pointAtParameter(hitT),
               normal = ConstantMedium.Normal, // Arbitrary value
               material = phaseFunction,
-              // TODO - should these values be set to something else?
               u = 0.0,
               v = 0.0
             ))
@@ -41,7 +39,9 @@ class ConstantMedium(boundary: Hitable, density: Double, albedo: Texture) extend
 }
 
 object ConstantMedium {
-  def apply(boundary: Hitable, density: Double, albedo: Texture) = new ConstantMedium(boundary, density, albedo)
+
+  def apply(boundary: Hitable, density: Double, albedo: Texture, randomDouble: () => Double = Random.double _) =
+    new ConstantMedium(boundary, density, albedo, randomDouble)
 
   val Normal = Vec3(1, 0, 0)
 
