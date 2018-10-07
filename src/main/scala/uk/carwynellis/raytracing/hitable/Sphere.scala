@@ -7,9 +7,24 @@ import scala.annotation.tailrec
 
 class Sphere(val centre: Vec3, val radius: Double, val material: Material) extends Hitable {
 
-  // TODO - get some test coverage of this method
-  // TODO - refactor and tidy up
   override def hit(r: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
+
+    def computeHit(t: Double) =
+      if (t < tMax && t > tMin) {
+        val pointAtParameter = r.pointAtParameter(t)
+        val normal = (pointAtParameter - centre) / radius
+        val record = HitRecord(
+          t = t,
+          u = if (material.computeTextureCoordinates) Sphere.getSphereU(normal) else 0,
+          v = if (material.computeTextureCoordinates) Sphere.getSphereV(normal) else 0,
+          p = pointAtParameter,
+          normal = (pointAtParameter - centre) / radius,
+          material = material
+        )
+        Some(record)
+      }
+      else None
+
     val oc = r.origin - centre
 
     val a = r.direction.dot(r.direction)
@@ -20,38 +35,13 @@ class Sphere(val centre: Vec3, val radius: Double, val material: Material) exten
 
     if (discriminant > 0) {
       val discriminantRoot = math.sqrt(discriminant)
-      val x = (-b - discriminantRoot) / a
-      if (x < tMax && x > tMin) {
-        val pointAtParameter = r.pointAtParameter(x)
-        val normal = (pointAtParameter - centre) / radius
-        val record = HitRecord(
-          t = x,
-          u = if (material.computeTextureCoordinates) Sphere.getSphereU(normal) else 0,
-          v = if (material.computeTextureCoordinates) Sphere.getSphereV(normal) else 0,
-          p = pointAtParameter,
-          normal = (pointAtParameter - centre) / radius,
-          material = material
-        )
-        return Some(record)
-      }
 
-      val y = (-b + discriminantRoot) / a
-      if (y < tMax && y > tMin) {
-        val pointAtParameter = r.pointAtParameter(y)
-        val normal = (pointAtParameter - centre) / radius
-        val record = HitRecord(
-          t = y,
-          u = if (material.computeTextureCoordinates) Sphere.getSphereU(normal) else 0,
-          v = if (material.computeTextureCoordinates) Sphere.getSphereV(normal) else 0,
-          p = r.pointAtParameter(y),
-          normal = (r.pointAtParameter(y) - centre) / radius,
-          material = material
-        )
-        return Some(record)
-      }
+      def calculateT(d: Double) = (-b + d) / a
+
+      computeHit(calculateT(-discriminantRoot)) orElse
+        computeHit(calculateT(discriminantRoot))
     }
-
-    None
+    else None
   }
 
   override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = {
