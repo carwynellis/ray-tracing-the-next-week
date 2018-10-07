@@ -1,23 +1,36 @@
 package uk.carwynellis.raytracing.hitable
 
-import org.scalatest.FunSuite
-import uk.carwynellis.raytracing.{Ray, Vec3}
+import org.scalatest.{FunSuite, Matchers}
+import uk.carwynellis.raytracing.{HitRecord, Ray, Vec3}
 import uk.carwynellis.raytracing.material.Dielectric
 
-class SphereTest extends FunSuite {
+class SphereTest extends FunSuite with Matchers {
 
-  test("should compute hit in reasonable time") {
-    val sphere = Sphere(randomVec3, 10.0, new Dielectric(1))
+  private val material = Dielectric(0.5)
 
-    val start = System.currentTimeMillis()
-    val res = (0 until 1000).map { i =>
-      sphere.hit(Ray(randomVec3, randomVec3, math.random()), math.random(), math.random())
-    }
-    val end = System.currentTimeMillis()
-    println(s"runtime: ${end-start} ms")
-    println(res.size)
+  private val underTest = Sphere(
+    centre = Vec3(3,3,3),
+    radius = 1,
+    material = Dielectric(0.5)
+  )
+
+  test("should return None for ray that does not hit the sphere") {
+    val r = Ray(Vec3(0,0,0), Vec3(-1,0,0))
+
+    underTest.hit(r, 0, 1) shouldBe None
   }
 
-  private def randomVec3 = Vec3(math.random(), math.random(), math.random())
+  test("should return a hit record for a ray that hits the sphere") {
+    val r = Ray(Vec3(0,0,0), Vec3(3,3,3))
+
+    underTest.hit(r, 0, 1) shouldBe Some(HitRecord(
+      0.8075499102701248,
+      0.0,
+      0.0,
+      Vec3(2.4226497308103743,2.4226497308103743,2.4226497308103743),
+      Vec3(-0.5773502691896257,-0.5773502691896257,-0.5773502691896257),
+      material
+    ))
+  }
 
 }
