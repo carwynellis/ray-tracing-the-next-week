@@ -3,7 +3,7 @@ package uk.carwynellis.raytracing.material
 import uk.carwynellis.raytracing.{HitRecord, Random, Ray, Vec3}
 import uk.carwynellis.raytracing.texture.ConstantTexture
 
-class Dielectric(refractiveIndex: Double) extends Material(ConstantTexture(Vec3(1,1,1))) {
+case class Dielectric(refractiveIndex: Double) extends Material(ConstantTexture(Vec3(1,1,1))) {
 
   override def scatter(rayIn: Ray, record: HitRecord): Option[ScatterResult] = {
     val reflected = Material.reflect(rayIn.direction,record.normal)
@@ -40,8 +40,4 @@ class Dielectric(refractiveIndex: Double) extends Material(ConstantTexture(Vec3(
     val r0Squared = r0 * r0
     r0Squared + (1 - r0Squared) * Math.pow(1 - cosine, 5)
   }
-}
-
-object Dielectric {
-  def apply(refractiveIndex: Double) = new Dielectric(refractiveIndex)
 }
