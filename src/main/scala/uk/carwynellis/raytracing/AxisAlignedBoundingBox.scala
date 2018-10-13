@@ -10,7 +10,7 @@ import scala.annotation.tailrec
   * @param min
   * @param max
   */
-class AxisAlignedBoundingBox(val min: Vec3, val max: Vec3) {
+case class AxisAlignedBoundingBox(min: Vec3, max: Vec3) {
 
   /**
     * Determine whether a given ray has hit the bounding box or not.
