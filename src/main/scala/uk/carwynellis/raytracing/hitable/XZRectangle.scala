@@ -29,7 +29,6 @@ class XZRectangle(val x0: Double,
   }
 
   override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = Some(AxisAlignedBoundingBox(
-    // TODO - does the 0.0001 make any difference?
     min = Vec3(x0, k - 0.0001, z0),
     max = Vec3(x1, k + 0.0001, z1)
   ))
