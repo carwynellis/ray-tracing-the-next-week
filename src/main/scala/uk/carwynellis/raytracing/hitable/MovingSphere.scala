@@ -4,10 +4,10 @@ import uk.carwynellis.raytracing._
 import uk.carwynellis.raytracing.material.Material
 
 /**
-  * Class representing a sphere in motion.
+  * Class representing a moving sphere.
   *
-  * TODO - this could (and probably should) be consolidated into Sphere and perhaps hitable in general so all objects
-  *        that can be rendered support the concept of motion.
+  * For now this isn't a subclass of Sphere. If other objects are made 'moving' a general pattern might emerge that
+  * could be expressed as a trait than through class hierarchies.
   *
   * @param centre0
   * @param centre1
@@ -26,52 +26,9 @@ class MovingSphere(val centre0: Vec3,
   // Compute the location of the sphere centre at the specified time.
   private def centreAtTime(time: Double): Vec3 = centre0 + ( (time - time0) / (time1 - time0) ) * (centre1 - centre0)
 
-  // TODO - get some test coverage of this method
-  // TODO - refactor and tidy up
   override def hit(r: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
     val centre = centreAtTime(r.time)
-    val oc = r.origin - centre
-
-    val a = r.direction.dot(r.direction)
-    val b = oc.dot(r.direction)
-    val c = oc.dot(oc) - (radius * radius)
-
-    val discriminant = (b * b) - (a * c)
-    val discriminantRoot = math.sqrt(discriminant)
-
-    if (discriminant > 0) {
-      val x = (-b - discriminantRoot) / a
-      if (x < tMax && x > tMin) {
-        val pointAtParameter = r.pointAtParameter(x)
-        val normal = (pointAtParameter - centre) / radius
-        val record = HitRecord(
-          t = x,
-          u = if (material.computeTextureCoordinates) Sphere.getSphereU(normal) else 0,
-          v = if (material.computeTextureCoordinates) Sphere.getSphereV(normal) else 0,
-          p = pointAtParameter,
-          normal = normal,
-          material = material
-        )
-        return Some(record)
-      }
-
-      val y = (-b + discriminantRoot) / a
-      if (y < tMax && y > tMin) {
-        val pointAtParameter = r.pointAtParameter(y)
-        val normal = (pointAtParameter - centre) / radius
-        val record = HitRecord(
-          t = y,
-          u = if (material.computeTextureCoordinates) Sphere.getSphereU(normal) else 0,
-          v = if (material.computeTextureCoordinates) Sphere.getSphereV(normal) else 0,
-          p = r.pointAtParameter(y),
-          normal = normal,
-          material = material
-        )
-        return Some(record)
-      }
-    }
-
-    None
+    Sphere.hitAtCentre(centre, radius, material, r, tMin, tMax)
   }
 
   override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = {
