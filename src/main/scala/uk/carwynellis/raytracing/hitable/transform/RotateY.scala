@@ -26,7 +26,7 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
       test = Vec3(newX, y, newZ)
     } yield test
 
-    def min(a: Vec3, b: Vec3): Vec3 = {
+    def findMinValues(a: Vec3, b: Vec3): Vec3 = {
       val vecs = Seq(a, b)
       Vec3(
         x = vecs.map(_.x).min,
@@ -35,7 +35,7 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
       )
     }
 
-    def max(a: Vec3, b: Vec3): Vec3 = {
+    def findMaxValues(a: Vec3, b: Vec3): Vec3 = {
       val vecs = Seq(a, b)
       Vec3(
         x = vecs.map(_.x).max,
@@ -44,8 +44,8 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
       )
     }
 
-    val min = bounds.fold(Vec3(Double.MaxValue, Double.MaxValue, Double.MaxValue)) { (a, b) => min(a, b) }
-    val max = bounds.fold(Vec3(Double.MinValue, Double.MinValue, Double.MinValue)) { (a, b) => max(a, b) }
+    val min = bounds.fold(Vec3(Double.MaxValue, Double.MaxValue, Double.MaxValue)) { (a, b) => findMinValues(a, b) }
+    val max = bounds.fold(Vec3(Double.MinValue, Double.MinValue, Double.MinValue)) { (a, b) => findMaxValues(a, b) }
 
     AxisAlignedBoundingBox(min, max)
   }
