@@ -11,11 +11,7 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
   private val cosTheta = Math.cos(angleRadians)
 
   private val boundingBox = p.boundingBox(0, 1).map { box =>
-    // TODO - express this without vars
-    var min = Vec3(Double.MaxValue, Double.MaxValue, Double.MaxValue)
-    var max = Vec3(Double.MinValue, Double.MinValue, Double.MinValue)
-
-    val testVecs = for {
+    val bounds = for {
       i <- 0 until 2
       j <- 0 until 2
       k <- 0 until 2
@@ -30,17 +26,26 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
       test = Vec3(newX, y, newZ)
     } yield test
 
-    testVecs.foreach { t =>
-      (0 until 3) foreach { c =>
-        val component = t.get(c)
-        if (component > max.get(c)) {
-          max = max.set(c)(component)
-        }
-        if (component < min.get(c)) {
-          min = min.set(c)(component)
-        }
-      }
+    def min(a: Vec3, b: Vec3): Vec3 = {
+      val vecs = Seq(a, b)
+      Vec3(
+        x = vecs.map(_.x).min,
+        y = vecs.map(_.y).min,
+        z = vecs.map(_.z).min,
+      )
     }
+
+    def max(a: Vec3, b: Vec3): Vec3 = {
+      val vecs = Seq(a, b)
+      Vec3(
+        x = vecs.map(_.x).max,
+        y = vecs.map(_.y).max,
+        z = vecs.map(_.z).max,
+      )
+    }
+
+    val min = bounds.fold(Vec3(Double.MaxValue, Double.MaxValue, Double.MaxValue)) { (a, b) => min(a, b) }
+    val max = bounds.fold(Vec3(Double.MinValue, Double.MinValue, Double.MinValue)) { (a, b) => max(a, b) }
 
     AxisAlignedBoundingBox(min, max)
   }
@@ -71,7 +76,6 @@ class RotateY(p: Hitable, angle: Double) extends Hitable {
   }
 
   override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = boundingBox
-
 }
 
 object RotateY {
