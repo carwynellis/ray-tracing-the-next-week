@@ -14,7 +14,6 @@ class ImageTexture(image: BufferedImage) extends Texture {
   private val width = image.getWidth()
   private val height = image.getHeight()
 
-  // TODO - clean up the API to remove the Vec3 here?
   override def value(u: Double, v: Double, notUsed: Vec3): Vec3 = {
     val pixel = new Color(image.getRGB(u.toX, v.toY))
 
@@ -26,10 +25,10 @@ class ImageTexture(image: BufferedImage) extends Texture {
   }
 
   private implicit class DoubleOps(d: Double) {
-    def toX = toBoundedImageCoordinate(d, width)
+    def toX: Int = toBoundedImageCoordinate(d, width)
 
     // Note - vertical direction of image inverted, e.g. 1 is top, 0 is bottom.
-    def toY = toBoundedImageCoordinate(1 - d, height)
+    def toY: Int = toBoundedImageCoordinate(1 - d, height)
 
     private def toBoundedImageCoordinate(c: Double, max: Int): Int = {
       val coord = c * max
