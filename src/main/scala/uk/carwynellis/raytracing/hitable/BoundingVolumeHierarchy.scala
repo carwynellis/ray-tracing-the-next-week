@@ -10,20 +10,25 @@ class BoundingVolumeHierarchy(val node: List[Hitable],
                               val time0: Double,
                               val time1: Double) extends Hitable {
 
-  // Alternate hit implementation without tuples.
-  // This seems to yield a modest reduction in render times.
-  // TODO - can this be expressed more concisely without tuples?
+  /**
+    * Compute whether a ray hits any of the hitables within the BVH.
+    *
+    * Originally this was implemented as a pattern match on the tuple (leftHit, rightHit) but replacing this with the
+    * ugly if syntax below yielded a slight reduction in render times.
+    *
+    * @param ray
+    * @param tMin
+    * @param tMax
+    * @return
+    */
   override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
     if (box.hit(ray, tMin, tMax)) {
       val leftHit = left.hit(ray, tMin,tMax)
       val rightHit = right.hit(ray, tMin, tMax)
-      if (leftHit.isDefined) {
-        if (rightHit.isDefined) {
-          if (leftHit.get.t < rightHit.get.t) leftHit else rightHit
-        }
-        else leftHit
-      }
-      else rightHit
+
+      leftHit.map { lh =>
+        rightHit.fold(lh) { rh => if (lh.t < rh.t) lh else rh }
+      }.orElse(rightHit)
     }
     else None
   }

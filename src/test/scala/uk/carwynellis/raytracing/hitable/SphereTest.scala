@@ -14,13 +14,13 @@ class SphereTest extends FunSuite with Matchers {
     material = Dielectric(0.5)
   )
 
-  test("should return None for ray that does not hit the sphere") {
+  test("hit should return None for ray that does not hit the sphere") {
     val r = Ray(Vec3(0,0,0), Vec3(-1,0,0))
 
     underTest.hit(r, 0, 1) shouldBe None
   }
 
-  test("should return a hit record for a ray that hits the sphere") {
+  test("hit should return a hit record for a ray that hits the sphere") {
     val r = Ray(Vec3(0,0,0), Vec3(3,3,3))
 
     underTest.hit(r, 0, 1) shouldBe Some(HitRecord(
