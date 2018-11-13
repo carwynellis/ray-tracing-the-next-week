@@ -74,15 +74,14 @@ object BoundingVolumeHierarchy {
     new BoundingVolumeHierarchy(sortedHitables, left, right, boundingBox, time0, time1)
   }
 
-  // TODO - refactor the following to apply some DRY
-
-  private def compareXAxis(l: Hitable, r: Hitable) = {
+  private def compareAxis(l: Hitable,
+                          r: Hitable,
+                          f: (AxisAlignedBoundingBox, AxisAlignedBoundingBox) => (Double, Double)): Boolean = {
     val result = for {
       bl <- l.boundingBox(0, 0)
       br <- r.boundingBox(0, 0)
-      lX = bl.min.x
-      rX = br.min.x
-    } yield (lX - rX) < 0.0
+      bounds <- Option(f(bl, br)) // TODO - lift (Double, Double) into Option?
+    } yield (bounds._1 - bounds._2) < 0.0
 
     result match {
       case Some(b) => b
@@ -91,35 +90,8 @@ object BoundingVolumeHierarchy {
     }
   }
 
-  private def compareYAxis(l: Hitable, r: Hitable) = {
-    val result = for {
-      bl <- l.boundingBox(0, 0)
-      br <- r.boundingBox(0, 0)
-      lY = bl.min.y
-      rY = br.min.y
-    } yield (lY - rY) < 0.0
-
-    result match {
-      case Some(b) => b
-      // TODO - nicer way to handle this? Using exception for now for expediency
-      case None => throw new IllegalArgumentException("No bounding box for either hitable when comparing")
-    }
-  }
-
-  private def compareZAxis(l: Hitable, r: Hitable) = {
-    val result = for {
-      bl <- l.boundingBox(0, 0)
-      br <- r.boundingBox(0, 0)
-      lZ = bl.min.z
-      rZ = br.min.z
-    } yield (lZ - rZ) < 0.0
-
-    result match {
-      case Some(b) => b
-      // TODO - nicer way to handle this? Using exception for now for expediency
-      case None => throw new IllegalArgumentException("No bounding box for either hitable when comparing")
-    }
-
-  }
+  private def compareXAxis(l: Hitable, r: Hitable) = compareAxis(l, r, { (bl, br) => (bl.min.x, br.min.x)} )
+  private def compareYAxis(l: Hitable, r: Hitable) = compareAxis(l, r, { (bl, br) => (bl.min.y, br.min.y)} )
+  private def compareZAxis(l: Hitable, r: Hitable) = compareAxis(l, r, { (bl, br) => (bl.min.z, br.min.z)} )
 
 }
