@@ -77,12 +77,9 @@ object BoundingVolumeHierarchy {
   // TODO - refactor the following to apply some DRY
 
   private def compareXAxis(l: Hitable, r: Hitable) = {
-    val boxLeft = l.boundingBox(0, 0)
-    val boxRight = r.boundingBox(0, 0)
-
     val result = for {
-      bl <- boxLeft
-      br <- boxRight
+      bl <- l.boundingBox(0, 0)
+      br <- r.boundingBox(0, 0)
       lX = bl.min.x
       rX = br.min.x
     } yield (lX - rX) < 0.0
@@ -95,12 +92,9 @@ object BoundingVolumeHierarchy {
   }
 
   private def compareYAxis(l: Hitable, r: Hitable) = {
-    val boxLeft = l.boundingBox(0, 0)
-    val boxRight = r.boundingBox(0, 0)
-
     val result = for {
-      bl <- boxLeft
-      br <- boxRight
+      bl <- l.boundingBox(0, 0)
+      br <- r.boundingBox(0, 0)
       lY = bl.min.y
       rY = br.min.y
     } yield (lY - rY) < 0.0
@@ -113,12 +107,9 @@ object BoundingVolumeHierarchy {
   }
 
   private def compareZAxis(l: Hitable, r: Hitable) = {
-    val boxLeft = l.boundingBox(0, 0)
-    val boxRight = r.boundingBox(0, 0)
-
     val result = for {
-      bl <- boxLeft
-      br <- boxRight
+      bl <- l.boundingBox(0, 0)
+      br <- r.boundingBox(0, 0)
       lZ = bl.min.z
       rZ = br.min.z
     } yield (lZ - rZ) < 0.0
