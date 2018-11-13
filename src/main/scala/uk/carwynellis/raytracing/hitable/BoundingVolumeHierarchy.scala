@@ -80,7 +80,7 @@ object BoundingVolumeHierarchy {
     val result = for {
       bl <- l.boundingBox(0, 0)
       br <- r.boundingBox(0, 0)
-      bounds <- Option(f(bl, br)) // TODO - lift (Double, Double) into Option?
+      bounds <- Some(f(bl, br)) // We could define a lift here to pull the result up into an Option but it seems like overkill.
     } yield (bounds._1 - bounds._2) < 0.0
 
     result match {
