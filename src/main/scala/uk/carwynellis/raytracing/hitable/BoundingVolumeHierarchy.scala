@@ -1,10 +1,7 @@
 package uk.carwynellis.raytracing.hitable
 import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Random, Ray}
 
-// TODO - review the node definition here
-//      - do we need node as the whole list or can we select the centre of the list as the node?
-class BoundingVolumeHierarchy(val node: List[Hitable],
-                              val left: Hitable,
+class BoundingVolumeHierarchy(val left: Hitable,
                               val right: Hitable,
                               val box: AxisAlignedBoundingBox,
                               val time0: Double,
@@ -38,8 +35,8 @@ class BoundingVolumeHierarchy(val node: List[Hitable],
 
 object BoundingVolumeHierarchy {
 
-  def apply(hitables: List[Hitable], left: Hitable, right: Hitable, boundingBox: AxisAlignedBoundingBox, time0: Double, time1: Double) =
-    new BoundingVolumeHierarchy(hitables, left, right, boundingBox, time0, time1)
+  def apply(left: Hitable, right: Hitable, boundingBox: AxisAlignedBoundingBox, time0: Double, time1: Double) =
+    new BoundingVolumeHierarchy(left, right, boundingBox, time0, time1)
 
   // TODO - review this and see if it can be simplified
   def ofHitables(hitables: List[Hitable], time0: Double, time1: Double): BoundingVolumeHierarchy = {
@@ -71,7 +68,7 @@ object BoundingVolumeHierarchy {
       case Some(b) => b
     }
 
-    new BoundingVolumeHierarchy(sortedHitables, left, right, boundingBox, time0, time1)
+    new BoundingVolumeHierarchy(left, right, boundingBox, time0, time1)
   }
 
   private def compareAxis(l: Hitable,
