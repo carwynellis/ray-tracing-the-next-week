@@ -11,13 +11,13 @@ class BoundingVolumeHierarchyTest extends FunSuite with Matchers {
   private val sphere = Sphere(Vec3(0,0,0), 1.0, material)
   private val anotherSphere = Sphere(Vec3(1,2,3), 5.0, material)
 
-  test("should build a node with both child nodes set to the single element for a list of a single hitable") {
+  test("should build a node with only the left child set to the single element for a list of a single hitable") {
     val hitables = List(sphere)
 
     val result = BoundingVolumeHierarchy.ofHitables(hitables, 0, 0)
 
-    result.left shouldBe sphere
-    result.right shouldBe sphere
+    result.left shouldBe Some(sphere)
+    result.right shouldBe None
   }
 
   test("should build a single node with left node set to first element and right node set to second for list of two hitables") {
@@ -25,8 +25,8 @@ class BoundingVolumeHierarchyTest extends FunSuite with Matchers {
 
     val result = BoundingVolumeHierarchy.ofHitables(hitables, 0, 0)
 
-    result.left shouldBe anotherSphere
-    result.right shouldBe sphere
+    result.left shouldBe Some(anotherSphere)
+    result.right shouldBe Some(sphere)
   }
 
   test("should build a tree from a list of hitables") {
@@ -38,7 +38,7 @@ class BoundingVolumeHierarchyTest extends FunSuite with Matchers {
   }
 
   test("hit should return a hit record for a ray that hits one of the spheres") {
-    val hitables = List(sphere, sphere)
+    val hitables = List(sphere, sphere, sphere)
 
     val bvh = BoundingVolumeHierarchy.ofHitables(hitables, 0, 0)
 

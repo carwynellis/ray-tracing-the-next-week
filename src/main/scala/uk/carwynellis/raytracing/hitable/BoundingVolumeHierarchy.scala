@@ -1,9 +1,9 @@
 package uk.carwynellis.raytracing.hitable
 import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Random, Ray}
 
-class BoundingVolumeHierarchy(val left: Hitable,
-                              val right: Hitable,
-                              val box: AxisAlignedBoundingBox,
+class BoundingVolumeHierarchy(val left: Option[Hitable],
+                              val right: Option[Hitable],
+                              val box: Option[AxisAlignedBoundingBox],
                               val time0: Double,
                               val time1: Double) extends Hitable {
 
@@ -19,23 +19,26 @@ class BoundingVolumeHierarchy(val left: Hitable,
     * @return
     */
   override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
-    if (box.hit(ray, tMin, tMax)) {
-      val leftHit = left.hit(ray, tMin,tMax)
-      val rightHit = right.hit(ray, tMin, tMax)
+    // TODO - review this and tidy up
+    box.flatMap { b =>
+      if (b.hit(ray, tMin, tMax)) {
+        val leftHit = left.flatMap(_.hit(ray, tMin,tMax))
+        val rightHit = right.flatMap(_.hit(ray, tMin, tMax))
 
-      leftHit.map { lh =>
-        rightHit.fold(lh) { rh => if (lh.t < rh.t) lh else rh }
-      }.orElse(rightHit)
+        leftHit.map { lh =>
+          rightHit.fold(lh) { rh => if (lh.t < rh.t) lh else rh }
+        }.orElse(rightHit)
+      }
+      else None
     }
-    else None
   }
 
-  override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = Some(box)
+  override def boundingBox(t0: Double, t1: Double): Option[AxisAlignedBoundingBox] = box
 }
 
 object BoundingVolumeHierarchy {
 
-  def apply(left: Hitable, right: Hitable, boundingBox: AxisAlignedBoundingBox, time0: Double, time1: Double) =
+  def apply(left: Option[Hitable], right: Option[Hitable], boundingBox: Option[AxisAlignedBoundingBox], time0: Double, time1: Double) =
     new BoundingVolumeHierarchy(left, right, boundingBox, time0, time1)
 
   // TODO - review this and see if it can be simplified
@@ -48,24 +51,21 @@ object BoundingVolumeHierarchy {
       else if (axis == 1) hitables.sortWith(compareYAxis)
       else hitables.sortWith(compareZAxis)
 
-    val (left: Hitable, right: Hitable) = sortedHitables.size match {
-      case 1 => (sortedHitables.head, sortedHitables.head)
-      case 2 => (sortedHitables.head, sortedHitables.last)
+    val (left: Option[Hitable], right: Option[Hitable]) = sortedHitables.size match {
+      case 1 => (sortedHitables.headOption, None)
+      case 2 => (sortedHitables.headOption, sortedHitables.lastOption)
       case n =>
         val (hitablesLeft, hitablesRight) = sortedHitables.splitAt(n / 2)
         val leftNode = ofHitables(hitablesLeft, time0, time1)
         val rightNode = ofHitables(hitablesRight, time0, time1)
-        (leftNode, rightNode)
+        (Some(leftNode), Some(rightNode))
     }
 
-    val result = for {
-      bl <- left.boundingBox(time0, time1)
-      br <- right.boundingBox(time0, time1)
-    } yield AxisAlignedBoundingBox.surroundingBox(bl, br)
-
-    val boundingBox = result match {
-      case None => throw new IllegalArgumentException("No bounding box found during construction from list of Hitables")
-      case Some(b) => b
+    val boundingBox = (left.flatMap(_.boundingBox(time0, time1)), right.flatMap(_.boundingBox(time0, time1))) match {
+      case (Some(lb), Some(rb)) => Some(AxisAlignedBoundingBox.surroundingBox(lb, rb))
+      case (lb, None) => lb
+      case (None, rb) => rb
+      case _ => None
     }
 
     new BoundingVolumeHierarchy(left, right, boundingBox, time0, time1)
@@ -80,11 +80,7 @@ object BoundingVolumeHierarchy {
       bounds <- Some(f(bl, br)) // We could define a lift here to pull the result up into an Option but it seems like overkill.
     } yield (bounds._1 - bounds._2) < 0.0
 
-    result match {
-      case Some(b) => b
-      // TODO - nicer way to handle this? Using exception for now for expediency
-      case None => throw new IllegalArgumentException("No bounding box for either hitable when comparing")
-    }
+    result.fold(false)(b => b)
   }
 
   private def compareXAxis(l: Hitable, r: Hitable) = compareAxis(l, r, { (bl, br) => (bl.min.x, br.min.x)} )
