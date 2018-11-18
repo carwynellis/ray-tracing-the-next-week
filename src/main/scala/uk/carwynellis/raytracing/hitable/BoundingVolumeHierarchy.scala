@@ -1,11 +1,11 @@
 package uk.carwynellis.raytracing.hitable
 import uk.carwynellis.raytracing.{AxisAlignedBoundingBox, HitRecord, Random, Ray}
 
-class BoundingVolumeHierarchy(val left: Option[Hitable],
-                              val right: Option[Hitable],
-                              val box: Option[AxisAlignedBoundingBox],
-                              val time0: Double,
-                              val time1: Double) extends Hitable {
+case class BoundingVolumeHierarchy(left: Option[Hitable],
+                                  right: Option[Hitable],
+                                  box: Option[AxisAlignedBoundingBox],
+                                  time0: Double,
+                                  time1: Double) extends Hitable {
 
   /**
     * Compute whether a ray hits any of the hitables within the BVH.
@@ -38,11 +38,8 @@ class BoundingVolumeHierarchy(val left: Option[Hitable],
 
 object BoundingVolumeHierarchy {
 
-  def apply(left: Option[Hitable], right: Option[Hitable], boundingBox: Option[AxisAlignedBoundingBox], time0: Double, time1: Double) =
-    new BoundingVolumeHierarchy(left, right, boundingBox, time0, time1)
-
   // TODO - review this and see if it can be simplified
-  def ofHitables(hitables: List[Hitable], time0: Double, time1: Double): BoundingVolumeHierarchy = {
+  def fromHitables(hitables: List[Hitable], time0: Double, time1: Double): BoundingVolumeHierarchy = {
 
     val axis = (3 * Random.double).toInt
 
@@ -56,8 +53,8 @@ object BoundingVolumeHierarchy {
       case 2 => (sortedHitables.headOption, sortedHitables.lastOption)
       case n =>
         val (hitablesLeft, hitablesRight) = sortedHitables.splitAt(n / 2)
-        val leftNode = ofHitables(hitablesLeft, time0, time1)
-        val rightNode = ofHitables(hitablesRight, time0, time1)
+        val leftNode = fromHitables(hitablesLeft, time0, time1)
+        val rightNode = fromHitables(hitablesRight, time0, time1)
         (Some(leftNode), Some(rightNode))
     }
 

@@ -31,7 +31,7 @@ object Render extends App {
   println(s"Rendering scene to $filename")
 
   val bvh = BoundingVolumeHierarchy
-    .ofHitables(Scene.finalScene.hitables, time0, time1)
+    .fromHitables(Scene.finalScene.hitables, time0, time1)
 
   val renderer = Renderer(camera, bvh, width, height, samples)
   val imageWriter = ImageWriter(width, height, filename)

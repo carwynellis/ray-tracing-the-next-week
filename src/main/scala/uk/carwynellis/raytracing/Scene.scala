@@ -109,7 +109,7 @@ object Scene {
     val centre = Vec3(400, 400, 200)
 
     HitableList(List(
-      BoundingVolumeHierarchy.ofHitables(boxList.flatten.toList, 0, 1),
+      BoundingVolumeHierarchy.fromHitables(boxList.flatten.toList, 0, 1),
       XZRectangle(123, 423, 147, 412, 554, light),
       MovingSphere(centre, centre+Vec3(30, 0, 0), 50, Lambertian(ConstantTexture(Vec3(0.7, 0.3, 0.1))), 0, 1),
       Sphere(Vec3(260, 150, 45), 50, Dielectric(1.5)),
@@ -119,7 +119,7 @@ object Scene {
       ConstantMedium(mist, 0.0001, ConstantTexture(Vec3(1, 1, 1))),
       Sphere(Vec3(400, 200, 400), 100, Lambertian(ImageTexture(imagePath))),
       Sphere(Vec3(220, 280, 300), 80, Lambertian(NoiseTexture(0.1))),
-      Translate(RotateY(BoundingVolumeHierarchy.ofHitables(spheres.toList, 0, 1), 15), Vec3(-100, 270, 395))
+      Translate(RotateY(BoundingVolumeHierarchy.fromHitables(spheres.toList, 0, 1), 15), Vec3(-100, 270, 395))
     ))
   }
 
