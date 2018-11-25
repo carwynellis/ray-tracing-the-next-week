@@ -10,24 +10,22 @@ case class BoundingVolumeHierarchy(left: Option[Hitable],
   /**
     * Compute whether a ray hits any of the hitables within the BVH.
     *
-    * Originally this was implemented as a pattern match on the tuple (leftHit, rightHit) but replacing this with the
-    * ugly if syntax below yielded a slight reduction in render times.
-    *
     * @param ray
     * @param tMin
     * @param tMax
     * @return
     */
   override def hit(ray: Ray, tMin: Double, tMax: Double): Option[HitRecord] = {
-    // TODO - review this and tidy up
     box.flatMap { b =>
       if (b.hit(ray, tMin, tMax)) {
         val leftHit = left.flatMap(_.hit(ray, tMin,tMax))
         val rightHit = right.flatMap(_.hit(ray, tMin, tMax))
 
-        leftHit.map { lh =>
-          rightHit.fold(lh) { rh => if (lh.t < rh.t) lh else rh }
-        }.orElse(rightHit)
+        (leftHit, rightHit) match {
+          case (Some(lh), Some(rh)) => if (lh.t < rh.t) Some(lh) else Some(rh)
+          case (lh, None) => lh
+          case (None, rh) => rh
+        }
       }
       else None
     }
