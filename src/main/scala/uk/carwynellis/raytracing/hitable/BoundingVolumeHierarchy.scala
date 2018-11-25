@@ -37,6 +37,8 @@ case class BoundingVolumeHierarchy(left: Option[Hitable],
 object BoundingVolumeHierarchy {
 
   def fromHitables(hitables: List[Hitable], time0: Double, time1: Double): BoundingVolumeHierarchy = {
+    // Randomly select the axis we will sort on when splitting the next group of hitables. The intent here is to try to
+    // ensure construction of a more balanced BVH tree.
     val axis = (3 * Random.double).toInt
 
     val sortedHitables = hitables.sortWith(sortForAxis(axis))
