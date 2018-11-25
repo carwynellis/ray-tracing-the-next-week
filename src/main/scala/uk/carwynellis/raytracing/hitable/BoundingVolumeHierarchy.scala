@@ -36,15 +36,10 @@ case class BoundingVolumeHierarchy(left: Option[Hitable],
 
 object BoundingVolumeHierarchy {
 
-  // TODO - review this and see if it can be simplified
   def fromHitables(hitables: List[Hitable], time0: Double, time1: Double): BoundingVolumeHierarchy = {
-
     val axis = (3 * Random.double).toInt
 
-    val sortedHitables =
-      if (axis == 0)  hitables.sortWith(compareXAxis)
-      else if (axis == 1) hitables.sortWith(compareYAxis)
-      else hitables.sortWith(compareZAxis)
+    val sortedHitables = hitables.sortWith(sortForAxis(axis))
 
     val (left: Option[Hitable], right: Option[Hitable]) = sortedHitables.size match {
       case 1 => (sortedHitables.headOption, None)
@@ -78,8 +73,12 @@ object BoundingVolumeHierarchy {
     result.fold(false)(b => b)
   }
 
-  private def compareXAxis(l: Hitable, r: Hitable) = compareAxis(l, r, { (bl, br) => (bl.min.x, br.min.x)} )
-  private def compareYAxis(l: Hitable, r: Hitable) = compareAxis(l, r, { (bl, br) => (bl.min.y, br.min.y)} )
-  private def compareZAxis(l: Hitable, r: Hitable) = compareAxis(l, r, { (bl, br) => (bl.min.z, br.min.z)} )
+  private val compareXAxis = (l: Hitable, r: Hitable) => compareAxis(l, r, { (bl, br) => (bl.min.x, br.min.x)} )
+  private val compareYAxis = (l: Hitable, r: Hitable) => compareAxis(l, r, { (bl, br) => (bl.min.y, br.min.y)} )
+  private val compareZAxis = (l: Hitable, r: Hitable) => compareAxis(l, r, { (bl, br) => (bl.min.z, br.min.z)} )
+
+  // Sort methods for x,y,z axes addressable from 0 - 2. Allows random selection of sort method when building the
+  // BoundingVolumeHierarchy tree.
+  private val sortForAxis = IndexedSeq(compareXAxis, compareYAxis, compareZAxis)
 
 }
