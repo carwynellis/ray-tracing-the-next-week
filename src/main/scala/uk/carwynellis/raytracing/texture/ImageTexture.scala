@@ -6,6 +6,8 @@ import java.io.File
 import javax.imageio.ImageIO
 import uk.carwynellis.raytracing.Vec3
 
+import scala.util.{Failure, Success, Try}
+
 class ImageTexture(image: BufferedImage) extends Texture {
 
   // Enable texture coordinates so we can map the image to the surface of the sphere.
@@ -45,8 +47,12 @@ object ImageTexture {
   // Run headless to prevent Boot process appearing and stealing focus.
   System.setProperty("java.awt.headless", "true")
 
-  // TODO - this can throw
-  def apply(path: String) = new ImageTexture(ImageIO.read(new File(path)))
+  def fromPath(path: String): Either[Throwable, ImageTexture] = Try {
+    new ImageTexture(ImageIO.read(new File(path)))
+  } match {
+    case Success(it) => Right(it)
+    case Failure(ex) => Left(ex)
+  }
 
   def apply(image: BufferedImage) = new ImageTexture(image)
 

@@ -20,11 +20,16 @@ object Scene {
     Sphere(Vec3(0, 2, 0), 2, Lambertian(NoiseTexture(20))),
   ))
 
-  val imagePath = "/Users/carwyn/Downloads/earthmap.jpg"
+  private val earthTexturePath = "/Users/carwyn/Downloads/earthmap.jpg"
+
+  val earthTexture: ImageTexture = ImageTexture.fromPath(earthTexturePath).fold(
+    ex => throw ex, // Not much we can do except throw the exception if we failed to create the texture
+    identity
+  )
 
   val perlinAndImageSpheres = HitableList(List(
     Sphere(Vec3(0, -1000, 0), 1000, Lambertian(NoiseTexture(1))),
-    Sphere(Vec3(0, 2, 0), 2, Lambertian(ImageTexture(imagePath)))
+    Sphere(Vec3(0, 2, 0), 2, Lambertian(earthTexture))
   ))
 
   val perlinAndLight = HitableList(List(
@@ -117,7 +122,7 @@ object Scene {
       glassSurface,
       ConstantMedium(glassSurface, 0.2, ConstantTexture(Vec3(0.2, 0.4, 0.9))),
       ConstantMedium(mist, 0.0001, ConstantTexture(Vec3(1, 1, 1))),
-      Sphere(Vec3(400, 200, 400), 100, Lambertian(ImageTexture(imagePath))),
+      Sphere(Vec3(400, 200, 400), 100, Lambertian(earthTexture)),
       Sphere(Vec3(220, 280, 300), 80, Lambertian(NoiseTexture(0.1))),
       Translate(RotateY(BoundingVolumeHierarchy.fromHitables(spheres.toList, 0, 1), 15), Vec3(-100, 270, 395))
     ))
