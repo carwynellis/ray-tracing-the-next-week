@@ -5,13 +5,11 @@ import uk.carwynellis.raytracing.hitable._
 import uk.carwynellis.raytracing.material.{DiffuseLight, Lambertian}
 import uk.carwynellis.raytracing.texture.ConstantTexture
 
-// TODO - define a similar case that exercises the color method
-//      - confirm that the iteration is working as expected (doesn't seem to)
 class RendererTest extends FunSuite with Matchers {
 
   // Test that replicates the generation of component values exceeding 255.
   // This seems to be caused by having values in the light exceed 1
-  // TODO - is this accounted for in the code somehow? It doesn't seem to be in mine! :/
+  // TODO - this doesn't seem to be accounted for in the code in the book - am I missing something here?
   test("renderer should not generate illegal pixel component values") {
     val width = 600
     val height = 400
